@@ -47,19 +47,19 @@ public class BinaryHelper {
 		return String.valueOf(Integer.parseInt(String.valueOf(binInteger), 2));
 	}
 	
-	public static int convBinIntegerToBinInteger(int binInteger) {		
+	public static int convBinIntegerToDecInteger(int binInteger) {		
 		return Integer.parseInt(String.valueOf(binInteger), 2);
 	}
 	
 	public static int addBinariesInt(int bin1, int bin2) {
-		bin1 = BinaryHelper.convBinIntegerToBinInteger(bin1);
-		bin2 = BinaryHelper.convBinIntegerToBinInteger(bin2);
+		bin1 = BinaryHelper.convBinIntegerToDecInteger(bin1);
+		bin2 = BinaryHelper.convBinIntegerToDecInteger(bin2);
 		return BinaryHelper.convDecIntegerToBinInteger(bin1+bin2);
 	}
 	
 	public static int subBinariesInt(int bin1, int bin2) {
-		bin1 = BinaryHelper.convBinIntegerToBinInteger(bin1);
-		bin2 = BinaryHelper.convBinIntegerToBinInteger(bin2);
+		bin1 = BinaryHelper.convBinIntegerToDecInteger(bin1);
+		bin2 = BinaryHelper.convBinIntegerToDecInteger(bin2);
 		
 		if(bin2 > bin1) {
 			return -BinaryHelper.convDecIntegerToBinInteger(bin2-bin1);
@@ -75,8 +75,8 @@ public class BinaryHelper {
 	 * @return
 	 */
 	public static int mulBinariesInt(int bin1, int bin2) {
-		bin1 = BinaryHelper.convBinIntegerToBinInteger(bin1);
-		bin2 = BinaryHelper.convBinIntegerToBinInteger(bin2);
+		bin1 = BinaryHelper.convBinIntegerToDecInteger(bin1);
+		bin2 = BinaryHelper.convBinIntegerToDecInteger(bin2);
 		
 		return BinaryHelper.convDecIntegerToBinInteger(bin1*bin2);
 	}
@@ -88,9 +88,30 @@ public class BinaryHelper {
 	 * @return
 	 */
 	public static int divBinariesInt(int bin1, int bin2) {
-		bin1 = BinaryHelper.convBinIntegerToBinInteger(bin1);
-		bin2 = BinaryHelper.convBinIntegerToBinInteger(bin2);
+		bin1 = BinaryHelper.convBinIntegerToDecInteger(bin1);
+		bin2 = BinaryHelper.convBinIntegerToDecInteger(bin2);
 		
 		return BinaryHelper.convDecIntegerToBinInteger(bin1/bin2);
+	}
+	
+	
+	public static int shiftLeftInt(int bin, int pos) {
+		if(pos <= 0) return bin;
+		
+		bin = BinaryHelper.convBinIntegerToDecInteger(bin);
+		
+		for (int i = 0; i < pos; i++) bin *= 2;
+		
+		return BinaryHelper.convDecIntegerToBinInteger(bin);
+	}
+	
+	public static int shiftRightInt(int bin, int pos) {
+		if(pos <= 0) return bin;
+		
+		bin = BinaryHelper.convBinIntegerToDecInteger(bin);
+		
+		for (int i = 0; i < pos; i++) bin /= 2;
+		
+		return BinaryHelper.convDecIntegerToBinInteger(bin);
 	}
 }

@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import core.BinaryNumber;
 import core.helpers.BinaryHelper;
 
 /**
@@ -25,7 +26,7 @@ public class BinaryNumberTestCase extends BinaryHelper {
 	@Test
 	public void test() {
 		String numStringDec = "15";
-		String numStringBin = "-111";
+		String numStringBin = "111";
 		int numIntDec = -15;
 		int numIntBin2 = 1111;
 		int numIntBin1 = 111;
@@ -40,10 +41,15 @@ public class BinaryNumberTestCase extends BinaryHelper {
 //		System.out.println(BinaryHelper.convDecStringToBinString(numStringBin));
 		
 		
-		System.out.println(BinaryHelper.addBinariesInt(numIntBin1, numIntBin1));
-		System.out.println(BinaryHelper.subBinariesInt(numIntBin2, numIntBin1));
-		System.out.println(BinaryHelper.mulBinariesInt(numIntBin2, numIntBin1));
-		System.out.println(BinaryHelper.divBinariesInt(numIntBin2, numIntBin1));
+//		System.out.println(BinaryHelper.addBinariesInt(numIntBin1, numIntBin1));
+//		System.out.println(BinaryHelper.subBinariesInt(numIntBin2, numIntBin1));
+//		System.out.println(BinaryHelper.mulBinariesInt(numIntBin2, numIntBin1));
+//		System.out.println(BinaryHelper.divBinariesInt(numIntBin2, numIntBin1));
+		
+		
+//		System.out.println(new BinaryNumber(numStringBin).stringValue());
+		
+		System.out.println(BinaryHelper.shiftRightInt(numIntBin2,2));
 	}
 
 }
