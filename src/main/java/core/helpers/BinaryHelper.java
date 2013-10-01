@@ -68,6 +68,12 @@ public class BinaryHelper {
 		return BinaryHelper.convDecIntegerToBinInteger(bin1-bin2);
 	}
 	
+	/**
+	 * Multiply two binary numbers
+	 * @param bin1
+	 * @param bin2
+	 * @return
+	 */
 	public static int mulBinariesInt(int bin1, int bin2) {
 		bin1 = BinaryHelper.convBinIntegerToBinInteger(bin1);
 		bin2 = BinaryHelper.convBinIntegerToBinInteger(bin2);

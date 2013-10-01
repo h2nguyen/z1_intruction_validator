@@ -39,6 +39,7 @@ public class BinaryNumberTestCase extends BinaryHelper {
 //		System.out.println(BinaryHelper.convDecStringToBinInteger(numStringDec));
 //		System.out.println(BinaryHelper.convDecStringToBinString(numStringBin));
 		
+		
 		System.out.println(BinaryHelper.addBinariesInt(numIntBin1, numIntBin1));
 		System.out.println(BinaryHelper.subBinariesInt(numIntBin2, numIntBin1));
 		System.out.println(BinaryHelper.mulBinariesInt(numIntBin2, numIntBin1));
