@@ -10,6 +10,10 @@ package core.helpers;
 public class BinaryHelper {
 
 	public static String convDecStringToBinString(String decString) {
+		if(decString.charAt(0) == '-') {
+			decString = decString.replace("-", "");
+			return "-"+Integer.toBinaryString(Integer.parseInt(decString));
+		}
 		return Integer.toBinaryString(Integer.parseInt(decString));
 	}
 	
@@ -57,7 +61,7 @@ public class BinaryHelper {
 		return BinaryHelper.convDecIntegerToBinInteger(bin1+bin2);
 	}
 	
-	public static int subBinariesInt(int bin1, int bin2) {
+	public static int subBinariesInteger(int bin1, int bin2) {
 		bin1 = BinaryHelper.convBinIntegerToDecInteger(bin1);
 		bin2 = BinaryHelper.convBinIntegerToDecInteger(bin2);
 		
@@ -74,7 +78,7 @@ public class BinaryHelper {
 	 * @param bin2
 	 * @return
 	 */
-	public static int mulBinariesInt(int bin1, int bin2) {
+	public static int mulBinariesInteger(int bin1, int bin2) {
 		bin1 = BinaryHelper.convBinIntegerToDecInteger(bin1);
 		bin2 = BinaryHelper.convBinIntegerToDecInteger(bin2);
 		
@@ -87,7 +91,7 @@ public class BinaryHelper {
 	 * @param bin2
 	 * @return
 	 */
-	public static int divBinariesInt(int bin1, int bin2) {
+	public static int divBinariesInteger(int bin1, int bin2) {
 		bin1 = BinaryHelper.convBinIntegerToDecInteger(bin1);
 		bin2 = BinaryHelper.convBinIntegerToDecInteger(bin2);
 		
@@ -95,7 +99,7 @@ public class BinaryHelper {
 	}
 	
 	
-	public static int shiftLeftInt(int bin, int pos) {
+	public static int shiftLeftBinInteger(int bin, int pos) {
 		if(pos <= 0) return bin;
 		
 		bin = BinaryHelper.convBinIntegerToDecInteger(bin);
@@ -105,7 +109,7 @@ public class BinaryHelper {
 		return BinaryHelper.convDecIntegerToBinInteger(bin);
 	}
 	
-	public static int shiftRightInt(int bin, int pos) {
+	public static int shiftRightBinInteger(int bin, int pos) {
 		if(pos <= 0) return bin;
 		
 		bin = BinaryHelper.convBinIntegerToDecInteger(bin);
@@ -113,5 +117,22 @@ public class BinaryHelper {
 		for (int i = 0; i < pos; i++) bin /= 2;
 		
 		return BinaryHelper.convDecIntegerToBinInteger(bin);
+	}
+	
+	public static int shiftLeftBinString(String bin, int pos) {
+		return shiftLeftBinInteger(Integer.parseInt(bin), pos);
+	}
+	
+	public static int shiftRightBinString(String bin, int pos) {
+		return shiftRightBinInteger(Integer.parseInt(bin), pos);
+	}
+	
+	public static int negateBinInteger(int numInteger) {
+		return -1 * numInteger;
+	}
+	
+	public static int negateBinString(String numString) {
+		int num = Integer.valueOf(numString);
+		return -1 * num;
 	}
 }

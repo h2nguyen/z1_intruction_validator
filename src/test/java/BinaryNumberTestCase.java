@@ -25,9 +25,9 @@ public class BinaryNumberTestCase extends BinaryHelper {
 
 	@Test
 	public void test() {
-		String numStringDec = "15";
+		String numStringDec = "-15";
 		String numStringBin = "111";
-		int numIntDec = -15;
+		int numIntDec = 15;
 		int numIntBin2 = 1111;
 		int numIntBin1 = 111;
 		
@@ -46,10 +46,11 @@ public class BinaryNumberTestCase extends BinaryHelper {
 //		System.out.println(BinaryHelper.mulBinariesInt(numIntBin2, numIntBin1));
 //		System.out.println(BinaryHelper.divBinariesInt(numIntBin2, numIntBin1));
 		
+		BinaryNumber bin1 = new BinaryNumber("11101001");
+		BinaryNumber bin2 = new BinaryNumber("11101001");
+		System.out.println(bin1.add(bin2).stringValue());
 		
-//		System.out.println(new BinaryNumber(numStringBin).stringValue());
-		
-		System.out.println(BinaryHelper.shiftRightInt(numIntBin2,2));
+//		System.out.println(BinaryHelper.shiftRightBinString(numStringBin,1));
 	}
 
 }
