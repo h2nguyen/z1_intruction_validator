@@ -103,16 +103,15 @@ public class BinaryNumber {
 		}
 		return true;
 	}
-	
-	/**
-	 * 
-	 * @param num
-	 * @return
-	 */
-	private boolean checkIfBin(int num) {
-		return checkIfBin(String.valueOf(num));
-	}
 
+	public BinaryNumber getExponent() {
+		int decExp = this.bits.length - 1;
+		int binExp = BinaryHelper.convDecIntegerToBinInteger(decExp);
+				
+		
+		return new BinaryNumber(binExp);
+	}
+	
 	public BinaryNumber getNegative() {
 		return new BinaryNumber(bits, negative & false);
 	}
@@ -137,6 +136,30 @@ public class BinaryNumber {
 
 	public BinaryNumber add(BinaryNumber ab) {
 		return new BinaryNumber(BinaryHelper.addBinariesInt(this.intValue(),ab.intValue()));
+	}
+
+	public BinaryNumber shiftRight1() {
+		return new BinaryNumber(BinaryHelper.shiftRightBinInteger(this.intValue(),1));
+	}
+
+	public BinaryNumber shiftRight2() {
+		return new BinaryNumber(BinaryHelper.shiftRightBinInteger(this.intValue(),2));
+	}
+
+	public BinaryNumber shiftLeft1() {
+		return new BinaryNumber(BinaryHelper.shiftLeftBinInteger(this.intValue(),1));
+	}
+
+	public BinaryNumber shiftLeft3() {
+		return new BinaryNumber(BinaryHelper.shiftLeftBinInteger(this.intValue(),3));
+	}
+	
+	public BinaryNumber shiftLeft(BinaryNumber times) {
+		return new BinaryNumber(BinaryHelper.shiftLeftBinInteger(this.intValue(),BinaryHelper.convBinIntegerToDecInteger(times.intValue())));
+	}
+	
+	public BinaryNumber shiftRight(BinaryNumber times) {
+		return new BinaryNumber(BinaryHelper.shiftRightBinInteger(this.intValue(),BinaryHelper.convBinIntegerToDecInteger(times.intValue())));
 	}
 	
 }

@@ -1,7 +1,5 @@
 package core;
 
-import core.helpers.BinaryHelper;
-
 public class Exponent {
 
 	private BinaryNumber Aa;
@@ -44,13 +42,14 @@ public class Exponent {
 	 * @return the ae
 	 */
 	public BinaryNumber getAe() {
+		addAaAb();
 		return Ae;
 	}
 	
 	/**
 	 * @return the negative ae
 	 */
-	public BinaryNumber getNegativeAe() {
+	public BinaryNumber getAeNegative() {
 		return Ae.getNegativeAs2sComplement();
 	}
 
@@ -61,7 +60,7 @@ public class Exponent {
 		Ae = ae;
 	}
 
-	private void addAaAe() {
+	private void addAaAb() {
 		Ae = Aa.add(Ab);
 	}
 	

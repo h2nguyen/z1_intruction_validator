@@ -30,6 +30,11 @@ public class BinaryNumberTestCase extends BinaryHelper {
 		int numIntDec = 15;
 		int numIntBin2 = 1111;
 		int numIntBin1 = 111;
+		BinaryNumber bin1 = new BinaryNumber("10010");
+		BinaryNumber bin2 = new BinaryNumber("10010");
+		BinaryNumber exp = new BinaryNumber("-101");
+		
+		System.out.println(bin1.shiftRight(exp).stringValue());
 		
 //		System.out.println(BinaryHelper.convBinIntegerToBinString(numIntBin2));
 //		System.out.println(BinaryHelper.convBinIntegerToDecString(numIntBin2));
@@ -39,17 +44,11 @@ public class BinaryNumberTestCase extends BinaryHelper {
 //		System.out.println(BinaryHelper.convDecIntegerToBinString(numIntDec));
 //		System.out.println(BinaryHelper.convDecStringToBinInteger(numStringDec));
 //		System.out.println(BinaryHelper.convDecStringToBinString(numStringBin));
-		
-		
 //		System.out.println(BinaryHelper.addBinariesInt(numIntBin1, numIntBin1));
 //		System.out.println(BinaryHelper.subBinariesInt(numIntBin2, numIntBin1));
 //		System.out.println(BinaryHelper.mulBinariesInt(numIntBin2, numIntBin1));
 //		System.out.println(BinaryHelper.divBinariesInt(numIntBin2, numIntBin1));
-		
-		BinaryNumber bin1 = new BinaryNumber("11101001");
-		BinaryNumber bin2 = new BinaryNumber("11101001");
-		System.out.println(bin1.add(bin2).stringValue());
-		
+//		System.out.println(bin1.add(bin2).stringValue());
 //		System.out.println(BinaryHelper.shiftRightBinString(numStringBin,1));
 	}
 
