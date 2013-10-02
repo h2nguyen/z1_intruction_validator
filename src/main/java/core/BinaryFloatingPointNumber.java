@@ -74,10 +74,7 @@ public class BinaryFloatingPointNumber extends BinaryNumber {
 	public String stringValue() {
 		String binString = "";
 		for (int bitIndex = 0; bitIndex < eBits.length; bitIndex++) {
-			if(eBits[bitIndex])
-				binString += "1";
-			else
-				binString += "0";
+			binString += eBits[bitIndex] ?  "1" : "0";
 		}
 		
 		if(mBits.length > 0) {
@@ -85,10 +82,7 @@ public class BinaryFloatingPointNumber extends BinaryNumber {
 		}
 		
 		for (int bitIndex = 0; bitIndex < mBits.length; bitIndex++) {
-			if(mBits[bitIndex])
-				binString += "1";
-			else
-				binString += "0";
+			binString += mBits[bitIndex] ? "1" : "0";
 		}
 		
 		if(negative)
