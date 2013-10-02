@@ -11,11 +11,14 @@ import core.helpers.BinaryHelper;
  */
 public class BinaryNumber {
 
-	private boolean bits[];
-	private boolean negative;
+	protected boolean eBits[];
+	protected boolean negative;
+	
+	public BinaryNumber() {		
+	}
 	
 	public BinaryNumber(boolean bits[], boolean negative) {
-		this.bits = copyBoolArray(bits); 
+		this.eBits = copyBoolArray(bits); 
 		this.negative = negative;
 	}
 	
@@ -32,7 +35,10 @@ public class BinaryNumber {
 	 * @param binAsString
 	 */
 	public BinaryNumber(String binAsString) {
-		
+		this.setEBits(binAsString);
+	}
+	
+	protected void setEBits(String binAsString) {
 		if(!checkIfBin(binAsString)) {
 			binAsString = BinaryHelper.convDecStringToBinString(binAsString);
 		}
@@ -42,10 +48,10 @@ public class BinaryNumber {
 			binAsString = binAsString.replace("-", "");
 		}
 		
-		bits = new boolean[binAsString.length()];
+		eBits = new boolean[binAsString.length()];
 		for (int bitIndex = 0; bitIndex <binAsString.length(); bitIndex++) {
 			if(binAsString.charAt(bitIndex) == '1')
-				bits[bitIndex] = true;
+				eBits[bitIndex] = true;
 		}
 	}
 	
@@ -64,8 +70,8 @@ public class BinaryNumber {
 	 */
 	public String stringValue() {
 		String binString = "";
-		for (int bitIndex = 0; bitIndex < bits.length; bitIndex++) {
-			if(bits[bitIndex])
+		for (int bitIndex = 0; bitIndex < eBits.length; bitIndex++) {
+			if(eBits[bitIndex])
 				binString += "1";
 			else
 				binString += "0";
@@ -80,14 +86,7 @@ public class BinaryNumber {
 	 * @return
 	 */
 	public int intValue() {
-		String binString = "";
-		for (int bitIndex = 0; bitIndex < bits.length; bitIndex++) {
-			if(bits[bitIndex])
-				binString += "1";
-			else
-				binString += "0";
-		}
-		return Integer.parseInt(binString);
+		return Integer.parseInt(stringValue());
 	}
 
 	/**
@@ -95,7 +94,7 @@ public class BinaryNumber {
 	 * @param num
 	 * @return
 	 */
-	private boolean checkIfBin(String num) {
+	protected boolean checkIfBin(String num) {
 		for (int i = 0; i < num.length(); i++) {
 			if(num.charAt(i) != '0' && num.charAt(i) != '1' && num.charAt(i) != '-' && num.charAt(i) != '+') {
 				return false;
@@ -105,7 +104,7 @@ public class BinaryNumber {
 	}
 
 	public BinaryNumber getExponent() {
-		int decExp = this.bits.length - 1;
+		int decExp = this.eBits.length - 1;
 		int binExp = BinaryHelper.convDecIntegerToBinInteger(decExp);
 				
 		
@@ -113,23 +112,23 @@ public class BinaryNumber {
 	}
 	
 	public BinaryNumber getNegative() {
-		return new BinaryNumber(bits, negative & false);
+		return new BinaryNumber(eBits, negative & false);
 	}
 	
 	public BinaryNumber getNegativeAs1sComplement() {
-		BinaryNumber neg = new BinaryNumber(bits, negative);
+		BinaryNumber neg = new BinaryNumber(eBits, negative);
 
-		for (int i = 0; i < neg.bits.length; i++) {
-			neg.bits[i] = !neg.bits[i];
+		for (int i = 0; i < neg.eBits.length; i++) {
+			neg.eBits[i] = !neg.eBits[i];
 		}
 		return new BinaryNumber(neg.intValue());
 	}
 	
 	public BinaryNumber getNegativeAs2sComplement() {
-		BinaryNumber neg = new BinaryNumber(bits, negative);
+		BinaryNumber neg = new BinaryNumber(eBits, negative);
 
-		for (int i = 0; i < neg.bits.length; i++) {
-			neg.bits[i] = !neg.bits[i];
+		for (int i = 0; i < neg.eBits.length; i++) {
+			neg.eBits[i] = !neg.eBits[i];
 		}
 		return new BinaryNumber(BinaryHelper.addBinariesInt(neg.intValue(),1));
 	}

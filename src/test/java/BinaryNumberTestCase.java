@@ -3,6 +3,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import core.BinaryFloatingPointNumber;
 import core.BinaryNumber;
 import core.helpers.BinaryHelper;
 
@@ -33,9 +34,14 @@ public class BinaryNumberTestCase extends BinaryHelper {
 		BinaryNumber bin1 = new BinaryNumber("10010");
 		BinaryNumber bin2 = new BinaryNumber("10010");
 		BinaryNumber exp = new BinaryNumber("-101");
+//		BinaryFloatingPointNumber binf = new BinaryFloatingPointNumber("111.5");
+//		
+//		System.out.println(binf.stringValue());
 		
-		System.out.println(bin1.shiftRight(exp).stringValue());
 		
+		System.out.println(BinaryHelper.convDecFloatToBinStringWith0AndPoint((float).3));
+		
+//		System.out.println(bin1.shiftRight(exp).stringValue());
 //		System.out.println(BinaryHelper.convBinIntegerToBinString(numIntBin2));
 //		System.out.println(BinaryHelper.convBinIntegerToDecString(numIntBin2));
 //		System.out.println(BinaryHelper.convBinStringToDecInteger(numStringBin));
