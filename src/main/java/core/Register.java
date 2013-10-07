@@ -9,42 +9,13 @@ package core;
  */
 public class Register {
 
-	protected BinaryNumber A;
-	protected BinaryNumber B;
+	protected String name;
+	protected Mantissa mantissa;
+	protected Exponent exponent;
 
-	public Register(BinaryNumber A, BinaryNumber B) {
-		this.A = A;
-		this.B = B;
+	public Register(String name, Exponent A, Mantissa B) {
+		this.name = name;
+		this.exponent = A;
+		this.mantissa = B;
 	}
-
-	/**
-	 * @return the a
-	 */
-	public BinaryNumber getA() {
-		return A;
-	}
-
-	/**
-	 * @param a
-	 *            the a to set
-	 */
-	public void setA(BinaryNumber a) {
-		A = a;
-	}
-
-	/**
-	 * @return the b
-	 */
-	public BinaryNumber getB() {
-		return B;
-	}
-
-	/**
-	 * @param b
-	 *            the b to set
-	 */
-	public void setB(BinaryNumber b) {
-		B = b;
-	}
-
 }
