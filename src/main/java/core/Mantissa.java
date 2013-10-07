@@ -2,12 +2,12 @@ package core;
 
 public class Mantissa {
 
-	protected String name;
-	protected BinaryFloatingPointNumber number;
+	public static final int BITLENGTH = 16;
+
+	protected String number;
 	
-	public Mantissa(String name, BinaryFloatingPointNumber number) {
-		this.name = name;
-		this.number = number;
+	public Mantissa(String binNumber) {
+		this.number = binNumber;
 	}	
 
 }

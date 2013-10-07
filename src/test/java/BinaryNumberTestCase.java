@@ -44,8 +44,10 @@ public class BinaryNumberTestCase extends BinaryHelper {
 //		System.out.println(BinaryHelper.normalizeFloatingPointBinary(fb));
 //		System.out.println(BinaryHelper.getExponentFloatingPointBinary(fb));
 //		System.out.println(fb);
+//		String binString = BinaryHelper.conv
 		
-		System.out.println(BinaryHelper.convDecFloatingPointToBinString("12121212.0"));
+		System.out.println(BinaryHelper.getExponentFloatingPointBinary("10010"));
+		System.out.println(BinaryHelper.getExponentFloatingPointBinary("11"));
 		
 //		System.out.println(bin1.shiftRight(exp).stringValue());
 //		System.out.println(BinaryHelper.convBinIntegerToBinString(numIntBin2));

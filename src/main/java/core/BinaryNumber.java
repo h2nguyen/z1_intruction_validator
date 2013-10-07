@@ -38,6 +38,13 @@ public class BinaryNumber {
 		this.setEBits(binAsString);
 	}
 	
+	protected void setNegative(String sign) {
+		if(sign.length() != 1) {
+			this.negative = false;
+		}
+		this.negative = sign.charAt(0) == '1' ? true : false; 
+	}
+	
 	protected void setEBits(String binAsString) {
 		if(!checkIfBin(binAsString)) {
 			binAsString = BinaryHelper.convDecStringToBinString(binAsString);

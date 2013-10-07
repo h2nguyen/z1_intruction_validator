@@ -2,11 +2,10 @@ package core;
 
 public class Exponent {
 
-	protected String name;
-	protected BinaryNumber number;
+	public static final int BITLENGTH = 7;
+	protected String number;
 	
-	public Exponent(String name, BinaryNumber number) {
-		this.name = name;
-		this.number = number;
+	public Exponent(String binNumber) {
+		this.number = binNumber;
 	}	
 }

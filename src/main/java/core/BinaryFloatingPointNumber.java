@@ -50,14 +50,22 @@ public class BinaryFloatingPointNumber extends BinaryNumber {
 			super.setEBits(bits[0]);
 			this.setMBits(bits[1]);
 		} else {
-			super.setEBits(binAsString);
-			this.setMBits(new String());
+			if(binAsString.length() > 9) {
+				super.setNegative(""+binAsString.charAt(0));
+				super.setEBits(binAsString.substring(1, 8));
+				this.setMBits(binAsString.substring(9));
+			} else {
+				super.setEBits(binAsString);
+				this.setMBits(new String());
+			}
+			
+			
+			
 		}
 	}
 	
 	private void setMBits(String binAsString) {
-		if(!checkIfBin(binAsString)) {
-			//TODO need to convert to the real floating number after the full stop			
+		if(!checkIfBin(binAsString)) {			
 			binAsString = BinaryHelper.convDecFloatToBinString(binAsString);
 		}
 		
@@ -86,8 +94,8 @@ public class BinaryFloatingPointNumber extends BinaryNumber {
 		}
 		
 		if(negative)
-			return "-" + binString;
-		return binString;
+			return "1" + binString;
+		return "0" + binString;
 	}
 	
 	/**
@@ -96,5 +104,10 @@ public class BinaryFloatingPointNumber extends BinaryNumber {
 	 */
 	public float floatValue() {
 		return Integer.parseInt(this.stringValue());
+	}
+	
+	public String toString() {
+		return null;
+		
 	}
 }
