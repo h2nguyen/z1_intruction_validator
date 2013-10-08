@@ -26,8 +26,7 @@ public class Processor {
 	}
 	
 	public void addition() {
-		Addition addition = new Addition();
-		addition.run();
+		new Addition().run();
 	}
 
 	private void initRegisters() {
@@ -62,9 +61,18 @@ public class Processor {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	protected String Be() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	protected String Bf() {
 		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	protected String shiftLeftBe(int pos) {
 		return null;
 	}
 }

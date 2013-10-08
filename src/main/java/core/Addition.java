@@ -19,7 +19,12 @@ public class Addition extends Processor {
 			phase2(false);
 		}
 		
-		String largeExp = phase3(Aa,Ab);
+		if(BinaryHelper.convBinStringToDecInteger(Ae) == 0) {
+			phase3(true);
+		} else {
+			phase3(false);
+		}
+		
 		phase4(Aa,Ab);
 	}
 
@@ -55,15 +60,23 @@ public class Addition extends Processor {
 		} else {
 			Aa = Ae;
 			Bb = Bg();
+		}	
+	}
+	
+	private void phase3(boolean ae) {
+		if(ae) {
+			Ba = Be();
+		} else {
+			Ab = "-1";
+			Bb = shiftLeftBe(1); // 1/2Be
 		}
-		
 		
 	}
 
 	/**
 	 * Select the largest exponent.
 	 */
-	private String phase3(String Aa, String Ab) {
+	private String phase4(String Aa, String Ab) {
 		int expAa = BinaryHelper.getExponentFloatingPointBinary(Aa);
 		int expAb = BinaryHelper.getExponentFloatingPointBinary(Ab);
 		
@@ -75,8 +88,5 @@ public class Addition extends Processor {
 		
 	}
 
-	private void phase4(String aa2, String ab2) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 }
