@@ -4,6 +4,8 @@
 package core.helpers;
 
 import core.Exponent;
+import core.numbers.BinaryFloating;
+import core.numbers.BinaryFloating32Bit;
 
 /**
  * @author hnguyen
@@ -134,7 +136,7 @@ public class BinaryHelper {
 		return shiftLeftBinInteger(Integer.parseInt(bin), pos);
 	}
 	
-	public static String shiftLeftBinFloatingPointStringAsStringWithoutSignBit(String bin, int pos) {
+	public static String shiftRightBinFloatingPointStringAsStringWithoutSignBit(String bin, int pos) {
 		boolean hasExtension = false;
 		if(!bin.contains(".")) {
 			bin += ".0";
@@ -152,6 +154,37 @@ public class BinaryHelper {
 		}
 		
 		return removeLeadingZerosString(exp)+"."+removeFollowingZerosString(man);
+	}
+	
+	public static String shiftLeftBinFloatingPointStringAsStringWithoutSignBit(String bin, int pos) {
+		
+		
+		if(!bin.contains(".")) {
+			while(pos-- > 0) {
+				
+			}
+		}
+		
+		char[] bin2 = bin.toCharArray();
+
+		while(pos-- > 0) {
+			int ic = bin.indexOf('.');
+			if(ic+2 > bin.length()) {
+				bin += '0';
+				bin2 = bin.toCharArray();
+				ic = bin.indexOf('.');
+			}
+			if(ic+1 < bin.length()) {
+				bin2[ic] = bin2[ic+1];
+				bin2[ic+1] = '.';
+				bin = new String(bin2);
+			}
+		}
+		
+		bin = removeFollowingZerosString(removeLeadingZerosString(bin));
+		bin += bin.endsWith(".") ? "0" : ""; 
+		
+		return bin;
 	}
 	
 	public static String normalizeBinary(String floatingPointBin) {
@@ -249,7 +282,7 @@ public class BinaryHelper {
 //		if(!decAsString.startsWith("0.") && !decAsString.startsWith(".") )
 //			return null;
 		
-		float df = Float.parseFloat(decAsString);
+		double df = Double.parseDouble(decAsString);
 		if(df <= 0)
 			return "0"; 
 		String bin = "";
@@ -320,9 +353,7 @@ public class BinaryHelper {
 		
 		return sigPart+expPart+manPart;
 	}
-	
-	
-	
+
 	public static float convBinIntegerToDecFloat(int binAsInteger) {
 		return convBinStringToDecFloat(String.valueOf(binAsInteger));
 	}
@@ -342,4 +373,13 @@ public class BinaryHelper {
 				
 		return result;
 	}
+
+	public static String binBoolArrayToString(boolean[] exp) {
+		String bin = "";
+		for (int i = 0; i < exp.length; i++) {
+			bin += exp[i] ? "1" : "0";
+		}
+		return bin;
+	}
+
 }
