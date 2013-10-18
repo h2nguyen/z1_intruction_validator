@@ -300,9 +300,24 @@ public class BinaryHelper {
 		return bin;
 	}
 	
+	public static float convBinBehindPointStringToDecInteger(String string) {
+		if(string.startsWith("0.")) {
+			string = string.replace("0.", "");
+		}
+		
+		if(string.startsWith(".")) {
+			string = string.replace(".", "");
+		}
+		
+		float value = (float) 0.0;
+		for (int b = 0; b < string.length(); b++) {
+			value += 1.0 / (Math.pow(2, b+1)) * Integer.valueOf(""+string.charAt(b));
+		}
+		return value;
+	}
+	
 	public static String convDecFloatingPointToBinFloatingPointString(String decAsString, int expLength) {
-		
-		
+
 		if(!decAsString.contains(".")) {
 			decAsString += ".0";
 		}
@@ -326,6 +341,42 @@ public class BinaryHelper {
 		
 		return sigPart+expPart+manPart;
 	}
+	
+	public static float convBinFloatingPointToDecFloatingPointString(String binAsString, int expLength) {
+		int bitsLength = 1 + expLength;
+		while(binAsString.length() < bitsLength) {
+			binAsString +="0";
+		}
+		
+		String signPart = "";
+		String expPart = "";
+		String manPart = "";
+		for (int b = 0; b < binAsString.length(); b++) {
+			if(b == 0)
+				signPart += binAsString.charAt(b);
+			else if(b <= expLength)
+				expPart += binAsString.charAt(b);
+			else 
+				manPart += binAsString.charAt(b);
+		}
+		
+		manPart = "1."+ manPart;
+		int exp = BinaryHelper.convBinStringToDecInteger(expPart);
+		exp -= (int) (Math.pow(2, expLength - 1) - 1 );
+		
+		String binFloatingPoint = (exp < 0) ? 
+				BinaryHelper.shiftRightBinFloatingPointStringAsStringWithoutSignBit(manPart, Math.abs(exp)) :
+				BinaryHelper.shiftLeftBinFloatingPointStringAsStringWithoutSignBit(manPart, Math.abs(exp));
+		String[] binFloatingPointParts = binFloatingPoint.split("[.]");
+		
+		float result = BinaryHelper.convBinStringToDecInteger(binFloatingPointParts[0]);
+		result += BinaryHelper.convBinBehindPointStringToDecInteger(binFloatingPointParts[1]);
+		if(signPart.charAt(0) == '1')
+			result *= -1.0;
+		return result;
+	}
+
+
 
 	public static float convBinIntegerToDecFloat(int binAsInteger) {
 		return convBinStringToDecFloat(String.valueOf(binAsInteger));

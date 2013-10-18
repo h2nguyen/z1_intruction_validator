@@ -65,6 +65,18 @@ public class BinaryFloatingPoint {
 	}
 	
 	public BinaryFloatingPoint add(BinaryFloatingPoint bfp) {
+		// determine the difference D of the exponents
+		int bfpExp = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(bfp.exp));
+		int thisExp = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(this.exp));
+		int d = Math.abs(bfpExp-thisExp);
+		
+		// Shift mantissa of the smaller number d times to the left;
+		if(bfp.floatValue() < this.floatValue())
+			BinaryHelper.shiftLeftBinString(BinaryHelper.binBoolArrayToString(bfp.man), d);
+		else if (thisExp < bfpExp) {
+			BinaryHelper.shiftLeftBinString(BinaryHelper.binBoolArrayToString(this.man), d);
+		}
+		
 		return null;
 	}
 	
@@ -107,12 +119,8 @@ public class BinaryFloatingPoint {
 		return value;
 	}
 	
-	public float floatValue() {
-		float value = 0;
-		
-		if(this.sign)
-			value *= (float)-1.0;
-		return value;
+	public double floatValue() {
+		return BinaryHelper.convBinFloatingPointToDecFloatingPointString(this.toString(), this.expBits);		
 	}
 	
 	public double doubleValue() {
@@ -143,8 +151,6 @@ public class BinaryFloatingPoint {
 		
 		String sign = decAsString.startsWith("-") ? "1" : "0";
 		decAsString = decAsString.replace("-", "");
-		
-		
 		
 		String[] decAsStrings = decAsString.split("[.]");
 		
