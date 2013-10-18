@@ -3,8 +3,6 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import core.BinaryFloatingPointNumber;
-import core.BinaryNumber;
 import core.helpers.BinaryHelper;
 
 /**
@@ -31,9 +29,6 @@ public class BinaryNumberTestCase extends BinaryHelper {
 		int numIntDec = 15;
 		int numIntBin2 = 1111;
 		int numIntBin1 = 111;
-		BinaryNumber bin1 = new BinaryNumber("10010");
-		BinaryNumber bin2 = new BinaryNumber("10010");
-		BinaryNumber exp = new BinaryNumber("-101");
 //		BinaryFloatingPointNumber binf = new BinaryFloatingPointNumber("111.5");
 //		
 //		System.out.println(binf.stringValue());

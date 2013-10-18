@@ -3,10 +3,6 @@
  */
 package core.helpers;
 
-import core.Exponent;
-import core.numbers.BinaryFloating;
-import core.numbers.BinaryFloating32Bit;
-
 /**
  * @author hnguyen
  *
@@ -63,15 +59,6 @@ public class BinaryHelper {
 		bin1 = BinaryHelper.convBinIntegerToDecInteger(bin1);
 		bin2 = BinaryHelper.convBinIntegerToDecInteger(bin2);
 		return BinaryHelper.convDecIntegerToBinInteger(bin1+bin2);
-	}
-	
-	public static String addBinariesString(String aa, String ab) {
-		int al = aa.length();
-		int bl = ab.length();
-		
-		
-		
-		return null;
 	}
 	
 	public static int subBinariesInteger(int bin1, int bin2) {
@@ -157,8 +144,6 @@ public class BinaryHelper {
 	}
 	
 	public static String shiftLeftBinFloatingPointStringAsStringWithoutSignBit(String bin, int pos) {
-		
-		
 		if(!bin.contains(".")) {
 			while(pos-- > 0) {
 				
@@ -193,7 +178,7 @@ public class BinaryHelper {
 		}
 		
 		while(!floatingPointBin.startsWith("1.")) {
-			floatingPointBin = shiftLeftBinFloatingPointStringAsStringWithoutSignBit(floatingPointBin,1);
+			floatingPointBin = shiftRightBinFloatingPointStringAsStringWithoutSignBit(floatingPointBin,1);
 		}
 		
 		return floatingPointBin;
@@ -207,7 +192,7 @@ public class BinaryHelper {
 		
 		int pos = 0;
 		while(!floatingPointBin.startsWith("1.")) {
-			floatingPointBin = shiftLeftBinFloatingPointStringAsStringWithoutSignBit(floatingPointBin,1);
+			floatingPointBin = shiftRightBinFloatingPointStringAsStringWithoutSignBit(floatingPointBin,1);
 			pos++;
 		}
 		
@@ -296,55 +281,43 @@ public class BinaryHelper {
 		return bin;
 	}
 	
-	public static String convDecFloatingPointToBinString(String decAsString) {
+	public static String convDecFloatBehindThePointToBinString(String decAsString) {
 		
-		if(!decAsString.contains(".")) {
-			return convDecStringToBinString(decAsString);
+//		if(!decAsString.startsWith("0.") && !decAsString.startsWith(".") )
+//			return null;
+		
+		double df = Double.parseDouble("0."+decAsString);
+		if(df <= 0)
+			return "0"; 
+		String bin = "";
+		
+		while(df > 0) {
+			df *= 2;
+			bin += df >= 1 ? "1" : "0";
+			df -= df >= 1.0 ? 1.0 : 0.0 ;
 		}
 		
-		if(decAsString.startsWith("0.") || decAsString.startsWith(".") )
-			return convDecFloatToBinString(decAsString);
-		
-		String sigPart = decAsString.contains("-") ? "1" : "0";
-		decAsString = decAsString.replace("-", "");
-		
-		String expPart = decAsString.split("[.]")[0];
-		String manPart = decAsString.split("[.]")[1];
-		
-		expPart = BinaryHelper.convDecStringToBinString(expPart);
-		manPart = BinaryHelper.convDecFloatToBinString(manPart);
-		String floatingPointBinary = expPart+"."+manPart;
-		
-		int exp = getExponentFloatingPointBinary(floatingPointBinary);
-		exp += (int) (Math.pow(2, Exponent.BITLENGTH - 1) - 1 );
-		
-		expPart = BinaryHelper.convDecIntegerToBinString(exp);
-		
-		floatingPointBinary = normalizeBinary(floatingPointBinary);
-		manPart = floatingPointBinary.substring(floatingPointBinary.indexOf('.')+1);		
-		
-		return sigPart+expPart+manPart;
+		return bin;
 	}
 	
-	public static String zuseConvDecIntegerToBinFloatingPointString(String decAsString) {
+	public static String convDecFloatingPointToBinFloatingPointString(String decAsString, int expLength) {
 		
+		
+		if(!decAsString.contains(".")) {
+			decAsString += ".0";
+		}
 		String sigPart = decAsString.contains("-") ? "1" : "0";
 		decAsString = decAsString.replace("-", "");
-		
-		String binString = BinaryHelper.convDecStringToBinString(decAsString);
-		
-		String normalized = normalizeBinary(binString);
-		
 		
 		String expPart = decAsString.split("[.]")[0];
 		String manPart = decAsString.split("[.]")[1];
 		
 		expPart = BinaryHelper.convDecStringToBinString(expPart);
-		manPart = BinaryHelper.convDecFloatToBinString(manPart);
+		manPart = BinaryHelper.convDecFloatBehindThePointToBinString(manPart);
 		String floatingPointBinary = expPart+"."+manPart;
 		
 		int exp = getExponentFloatingPointBinary(floatingPointBinary);
-		exp += (int) (Math.pow(2, Exponent.BITLENGTH - 1) - 1 );
+		exp += (int) (Math.pow(2, expLength - 1) - 1 );
 		
 		expPart = BinaryHelper.convDecIntegerToBinString(exp);
 		
@@ -382,4 +355,11 @@ public class BinaryHelper {
 		return bin;
 	}
 
+	public static boolean isBinary(float num) {
+		return isBinary(String.valueOf(num));		
+	}
+	
+	public static boolean isBinary(String num) {
+		return num.matches("^[0-1]*[.]{0,1}[0-1]*");		
+	}
 }

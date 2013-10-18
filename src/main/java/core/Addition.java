@@ -2,10 +2,14 @@ package core;
 
 import core.helpers.BinaryHelper;
 
-public class Addition extends Processor {
+public class Addition<T> extends Processor {
 	
 	public Addition() {
 		// TODO Auto-generated constructor stub
+	}
+	
+	public T add(T a, T b) {
+		return null;
 	}
 
 	public void run() {
