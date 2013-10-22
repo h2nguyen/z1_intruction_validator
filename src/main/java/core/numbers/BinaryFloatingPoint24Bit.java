@@ -12,4 +12,7 @@ public class BinaryFloatingPoint24Bit extends BinaryFloatingPoint {
 		super(EXPONENT,MANTISSE,bin);		
 	}
 
+	public BinaryFloatingPoint24Bit(float num) {
+		this(DF.format(num).toString().replace(",", "."));
+	}
 }

@@ -5,6 +5,7 @@ package core.helpers;
 
 import core.logicgates.GateLogic;
 import core.logicgates.GateLogic.MultiGate;
+import core.numbers.BinaryFloatingPoint;
 
 /**
  * @author hnguyen
@@ -196,33 +197,83 @@ public class BinaryHelper {
 		return bin;
 	}
 
-	public static String normalizeBinary(String floatingPointBin) {
-		if (floatingPointBin.startsWith("1.")
-				|| floatingPointBin.startsWith("0.")
-				|| floatingPointBin.startsWith(".")) {
-			return floatingPointBin;
+	public static String normalizeBinary(String floatingPointBin, int maxShift) {
+//		if (floatingPointBin.startsWith("1.")
+//				|| floatingPointBin.startsWith("0.")
+//				|| floatingPointBin.startsWith(".")) {
+//			return floatingPointBin;
+//		}
+//
+//		while (!floatingPointBin.startsWith("1.")) {
+//			floatingPointBin = shiftRightBinFloatingPointStringAsStringWithoutSignBit(
+//					floatingPointBin, 1);
+//		}
+		
+		String temp = floatingPointBin;
+		
+		int pos = 0;
+		boolean wrongDirection = false;
+		while (!temp.startsWith("1.")) {
+			if(Math.abs(pos) > maxShift ) {
+				wrongDirection = true;
+				break;
+			}
+				
+			temp = shiftRightBinFloatingPointStringAsStringWithoutSignBit(
+					temp, 1);
+			pos++;
+		}
+		
+		if(wrongDirection) {
+			temp = floatingPointBin;
+			pos = 0;
+			while (!temp.startsWith("1.")) {
+				if(Math.abs(pos) > maxShift ) {
+					return "";
+				}
+					
+				temp = shiftLeftBinFloatingPointStringAsStringWithoutSignBit(
+						temp, 1);
+				pos--;
+			}
 		}
 
-		while (!floatingPointBin.startsWith("1.")) {
-			floatingPointBin = shiftRightBinFloatingPointStringAsStringWithoutSignBit(
-					floatingPointBin, 1);
-		}
-
-		return floatingPointBin;
+		return temp;
 	}
 
-	public static int getExponentFloatingPointBinary(String floatingPointBin) {
-		if (floatingPointBin.startsWith("1.")
-				|| floatingPointBin.startsWith("0.")
-				|| floatingPointBin.startsWith(".")) {
-			return 0;
-		}
+	public static int getExponentFloatingPointBinary(String floatingPointBin, int maxShift) {
+//		if (floatingPointBin.startsWith("1.") || floatingPointBin.startsWith("0.")
+//				|| floatingPointBin.startsWith(".")) {
+//			return 0;
+//		}
 
+		String temp = floatingPointBin;
+		
 		int pos = 0;
-		while (!floatingPointBin.startsWith("1.")) {
-			floatingPointBin = shiftRightBinFloatingPointStringAsStringWithoutSignBit(
-					floatingPointBin, 1);
+		boolean wrongDirection = false;
+		while (!temp.startsWith("1.")) {
+			if(Math.abs(pos) > maxShift ) {
+				wrongDirection = true;
+				break;
+			}
+				
+			temp = shiftRightBinFloatingPointStringAsStringWithoutSignBit(
+					temp, 1);
 			pos++;
+		}
+		
+		if(wrongDirection) {
+			temp = floatingPointBin;
+			pos = 0;
+			while (!temp.startsWith("1.")) {
+				if(Math.abs(pos) > maxShift ) {
+					return Integer.MIN_VALUE;
+				}
+					
+				temp = shiftLeftBinFloatingPointStringAsStringWithoutSignBit(
+						temp, 1);
+				pos--;
+			}
 		}
 
 		return pos;
@@ -363,12 +414,12 @@ public class BinaryHelper {
 		manPart = BinaryHelper.convDecFloatBehindThePointToBinString(manPart);
 		String floatingPointBinary = expPart + "." + manPart;
 
-		int exp = getExponentFloatingPointBinary(floatingPointBinary);
+		int exp = getExponentFloatingPointBinary(floatingPointBinary, BinaryFloatingPoint.MAXSHIFT);
 		exp += (int) (Math.pow(2, expLength - 1) - 1);
 
 		expPart = BinaryHelper.convDecIntegerToBinStringWithLeadingZeros(exp, expLength);
 
-		floatingPointBinary = normalizeBinary(floatingPointBinary);
+		floatingPointBinary = normalizeBinary(floatingPointBinary, BinaryFloatingPoint.MAXSHIFT);
 		manPart = floatingPointBinary.substring(floatingPointBinary
 				.indexOf('.') + 1);
 

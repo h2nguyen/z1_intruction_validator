@@ -1,10 +1,16 @@
 package core.numbers;
 
+import java.text.DecimalFormat;
+
 import core.Exponent;
 import core.Mantissa;
 import core.helpers.BinaryHelper;
 
 public class BinaryFloatingPoint {
+	
+	public static DecimalFormat DF = new DecimalFormat("############################################.########################################################################################");
+	
+	public static final int MAXSHIFT = 64;
 //	protected int expBits;
 //	protected int manBits;
 	
@@ -88,6 +94,15 @@ public class BinaryFloatingPoint {
 		boolean[] manSum = BinaryHelper.addBinaryBoolArray(manBig, manSmall);
 		
 		// re-normalize the mantissa and exponent
+		
+		if(manSum[0] == false) {
+			boolean[] newManSum = new boolean[manSum.length-1]; 
+			for (int i = 1; i < manSum.length; i++) {
+				newManSum[i-1] = manSum[i];
+			}
+			manSum = newManSum;
+		}
+		
 		if(manSum.length > manBig.length) {
 			expLargest = BinaryHelper.addBinaryBoolArray(expLargest, new boolean[]{true});
 			
@@ -99,12 +114,19 @@ public class BinaryFloatingPoint {
 				expLargest = newExp;
 			}
 			
-			boolean[] newManSum = new boolean[manSum.length-1];
-			for (int i = 1; i < manSum.length; i++) {
-				newManSum[i-1] = manSum[i];
-			}
-			manSum = newManSum;
+//			boolean[] newManSum = new boolean[manSum.length-1];
+//			for (int i = 1; i < manSum.length; i++) {
+//				newManSum[i-1] = manSum[i];
+//			}
+//			manSum = newManSum;
 		}
+		
+		boolean[] newManSum = new boolean[manSum.length-1];
+		for (int i = 1; i < manSum.length; i++) {
+			newManSum[i-1] = manSum[i];
+		}
+		manSum = newManSum;
+
 		
 		System.out.println(BinaryHelper.binBoolArrayToString(expLargest));
 		System.out.println(BinaryHelper.binBoolArrayToString(manBig));
@@ -113,6 +135,7 @@ public class BinaryFloatingPoint {
 		
 		// set the sign of the result
 		BinaryFloatingPoint result = new BinaryFloatingPoint(false, new Exponent(expLargest), new Mantissa(manSum));
+		System.out.println(result.toString());
 		
 		return result;
 	}
@@ -193,17 +216,17 @@ public class BinaryFloatingPoint {
 		
 		String binExp = BinaryHelper.convDecStringToBinString(decAsStrings[0]);
 		
-		int expNum = BinaryHelper.getExponentFloatingPointBinary(binExp);
+		int expNum = BinaryHelper.getExponentFloatingPointBinary(binExp, MAXSHIFT);
 		int expDec = (int) (Math.pow(2,exp-1) - 1) + expNum;
 
 		String expBin = BinaryHelper.convDecIntegerToBinString(expDec);
 		String manBin = "";
 		
 		if(decAsStrings.length < 2) {
-			manBin = BinaryHelper.normalizeBinary(binExp);
+			manBin = BinaryHelper.normalizeBinary(binExp,MAXSHIFT);
 		} else {
 			String binMan = BinaryHelper.convDecFloatToBinString("0."+decAsStrings[1]);
-			manBin = BinaryHelper.normalizeBinary(binExp+binMan);
+			manBin = BinaryHelper.normalizeBinary(binExp+binMan,MAXSHIFT);
 		}		
 		manBin = manBin.replace("1.", "");
 		return new BinaryFloatingPoint(exp,man,sign + expBin + manBin).toString();

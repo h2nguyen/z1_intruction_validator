@@ -11,4 +11,8 @@ public class BinaryFloatingPoint64Bit extends BinaryFloatingPoint {
 	public BinaryFloatingPoint64Bit(String bin) {
 		super(EXPONENT,MANTISSE,bin);		
 	}
+	
+	public BinaryFloatingPoint64Bit(float num) {
+		this(DF.format(num).toString().replace(",", "."));
+	}
 }

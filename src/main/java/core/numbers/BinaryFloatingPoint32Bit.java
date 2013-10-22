@@ -1,8 +1,10 @@
 package core.numbers;
 
+import java.text.DecimalFormat;
+
 public class BinaryFloatingPoint32Bit extends BinaryFloatingPoint {
 	private static final int EXPONENT = 8;
-	private static final int MANTISSE = 23;
+	private static final int MANTISSE = 23;	
 	
 	public BinaryFloatingPoint32Bit() {
 		super(EXPONENT,MANTISSE);
@@ -13,6 +15,6 @@ public class BinaryFloatingPoint32Bit extends BinaryFloatingPoint {
 	}
 	
 	public BinaryFloatingPoint32Bit(float num) {
-		this(String.valueOf(num));
+		this(DF.format(num).toString().replace(",", "."));
 	}
 }
