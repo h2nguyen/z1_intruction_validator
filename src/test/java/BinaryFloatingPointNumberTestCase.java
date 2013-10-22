@@ -3,29 +3,40 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import core.helpers.BinaryHelper;
+import core.logicgates.GateLogic;
+import core.numbers.BinaryFloatingPoint;
 import core.numbers.BinaryFloatingPoint32Bit;
 import core.numbers.BinaryFloatingPoint64Bit;
 
 
 public class BinaryFloatingPointNumberTestCase {
 
-	@Test
-	public void testZuseBinaryFloatingPointBooleanBooleanArrayBooleanArray() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	public void testZuseBinaryFloatingPointString() {
-		fail("Not yet implemented");
-	}
 
 	//@Test
 	public void testToString() {
-		String bin = "10010010";
-		System.out.println(new BinaryFloatingPoint32Bit(bin).toString());
+		String bin = "1111111";
+		System.out.println(BinaryHelper.binBoolArrayToString(BinaryHelper.shiftLeft(BinaryHelper.binStringToBoolArray(bin), 3)));
 	}
 	
 	@Test
+	public void testAdder() {
+//		boolean[] ip1 = BinaryHelper.binStringToBoolArray("1110");
+//		boolean[] ip2 = BinaryHelper.binStringToBoolArray("1000");
+//
+//		
+//		boolean[] inputs = BinaryHelper.addBinaryBoolArray(ip1,ip2);
+//		
+//		System.out.println(BinaryHelper.binBoolArrayToString(inputs));
+		
+		
+		BinaryFloatingPoint32Bit bfp32bit1 = new BinaryFloatingPoint32Bit((float)35.0);
+		BinaryFloatingPoint32Bit bfp32bit2 = new BinaryFloatingPoint32Bit((float)15.5);
+		BinaryFloatingPoint result = bfp32bit1.add(bfp32bit2);
+		System.out.println(result.floatValue());
+		
+	}
+	
+	//@Test
 	public void otherStringTests() {
 		String a = "3.5";
 		String b = "4.7554654654654";
