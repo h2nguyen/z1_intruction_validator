@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 
 import core.Exponent;
 import core.Mantissa;
+import core.Operation;
 import core.helpers.BinaryHelper;
 
 public class BinaryFloatingPoint {
@@ -21,8 +22,9 @@ public class BinaryFloatingPoint {
 	protected Exponent exp;
 	protected Mantissa man;
 	
-	public BinaryFloatingPoint(int expBits, int manBits) {
-		this.sign = false;
+	
+	public BinaryFloatingPoint(boolean sign, int expBits, int manBits) {
+		this.sign = sign;
 		this.exp = new Exponent(expBits);
 		this.man = new Mantissa(manBits);
 	}
@@ -34,24 +36,66 @@ public class BinaryFloatingPoint {
 	}	
 	
 	public BinaryFloatingPoint(int exp, int man, String bin) {
-		this(exp,man);
+		this(bin.startsWith("-") ?  true : false, exp,man);
 		this.setNumber(bin);
 	}
 	
 	public BinaryFloatingPoint(int exp, int man, int bin) {
-		this(exp,man);
+		this(bin < 0 ? true : false, exp,man);
 		this.setNumber(String.valueOf(bin));
 	}
 
 	public BinaryFloatingPoint(int exp, int man, float num) {
-		this(exp,man);
+		this(num < 0 ? true : false, exp, man);
 		this.setNumber(String.valueOf(num));
 	}
 
+	/**
+	 * @return the sign
+	 */
+	public boolean isSign() {
+		return sign;
+	}
+
+	/**
+	 * @param sign the sign to set
+	 */
+	public void setSign(boolean sign) {
+		this.sign = sign;
+	}
+
+	/**
+	 * @return the exp
+	 */
+	public Exponent getExp() {
+		return exp;
+	}
+
+	/**
+	 * @param exp the exp to set
+	 */
+	public void setExp(Exponent exp) {
+		this.exp = exp;
+	}
+
+	/**
+	 * @return the man
+	 */
+	public Mantissa getMan() {
+		return man;
+	}
+
+	/**
+	 * @param man the man to set
+	 */
+	public void setMan(Mantissa man) {
+		this.man = man;
+	}
+
 	private void setNumber(String bin) {
-		if(!BinaryHelper.isBinary(bin)) {
+		//if(!BinaryHelper.isBinary(bin)) {
 			bin = BinaryHelper.convDecFloatingPointToBinFloatingPointString(bin, this.exp.getExpBits());
-		}
+//		}
 		for(int i = 0; i < bin.length(); i++) {
 			if(i == 0) {
 				if(bin.charAt(i) == '1') {
@@ -59,85 +103,33 @@ public class BinaryFloatingPoint {
 				}
 			} else if(i < (1 + this.exp.getExpBits())) {
 				if(bin.charAt(i) == '1') {
-					this.exp.getExp()[i-1] = true;
+					this.exp.getExpBoolArr()[i-1] = true;
 				}
 			} else if(i < (1 + this.exp.getExpBits() + this.man.getManBits())) {
 				if(bin.charAt(i) == '1') {
-					this.man.getMan()[i-1-this.exp.getExpBits()] = true;
+					this.man.getManBoolArr()[i-1-this.exp.getExpBits()] = true;
 				}
 			}
 		}
 	}
 	
 	public BinaryFloatingPoint add(BinaryFloatingPoint bfp) {
-		// determine the difference D of the exponents
-		int bfpExp = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(bfp.exp.getExp()));
-		int thisExp = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(this.exp.getExp()));
-		int d = bfpExp-thisExp;
-		
-		// select larges exponent
-		boolean[] expLargest = (d > 0) ? bfp.exp.getExp() : this.exp.getExp(); 
-		
-		// Shift mantissa of the smaller number d times to the right;
-		boolean[] manBig = null;
-		boolean[] manSmall = null;
-		
-		if(d > 0) {
-			manBig = BinaryHelper.mergeBinaryBoolArray(new boolean[]{true}, bfp.man.getMan());
-			manSmall = BinaryHelper.shiftRight(BinaryHelper.mergeBinaryBoolArray(new boolean[]{true}, this.man.getMan()), Math.abs(d));
-		} else {
-			manBig = BinaryHelper.mergeBinaryBoolArray(new boolean[]{true}, this.man.getMan());
-			manSmall = BinaryHelper.shiftRight(BinaryHelper.mergeBinaryBoolArray(new boolean[]{true}, bfp.man.getMan()), Math.abs(d));
-		}
-		
-		// Add the mantissas
-		boolean[] manSum = BinaryHelper.addBinaryBoolArray(manBig, manSmall);
-		
-		// re-normalize the mantissa and exponent
-		
-		if(manSum[0] == false) {
-			boolean[] newManSum = new boolean[manSum.length-1]; 
-			for (int i = 1; i < manSum.length; i++) {
-				newManSum[i-1] = manSum[i];
-			}
-			manSum = newManSum;
-		}
-		
-		if(manSum.length > manBig.length) {
-			expLargest = BinaryHelper.addBinaryBoolArray(expLargest, new boolean[]{true});
-			
-			if(expLargest.length > this.exp.getExpBits()) {
-				boolean[] newExp = new boolean[expLargest.length-1];
-				for (int i = 1; i < expLargest.length; i++) {
-					newExp[i-1] = expLargest[i];
-				}
-				expLargest = newExp;
-			}
-			
-//			boolean[] newManSum = new boolean[manSum.length-1];
-//			for (int i = 1; i < manSum.length; i++) {
-//				newManSum[i-1] = manSum[i];
-//			}
-//			manSum = newManSum;
-		}
-		
-		boolean[] newManSum = new boolean[manSum.length-1];
-		for (int i = 1; i < manSum.length; i++) {
-			newManSum[i-1] = manSum[i];
-		}
-		manSum = newManSum;
+		return new Operation().add(this, bfp);
+	}
+	
+	public BinaryFloatingPoint sub(BinaryFloatingPoint b) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-		
-		System.out.println(BinaryHelper.binBoolArrayToString(expLargest));
-		System.out.println(BinaryHelper.binBoolArrayToString(manBig));
-		System.out.println(BinaryHelper.binBoolArrayToString(manSmall));
-		System.out.println(BinaryHelper.binBoolArrayToString(manSum));
-		
-		// set the sign of the result
-		BinaryFloatingPoint result = new BinaryFloatingPoint(false, new Exponent(expLargest), new Mantissa(manSum));
-		System.out.println(result.toString());
-		
-		return result;
+	public BinaryFloatingPoint mul(BinaryFloatingPoint b) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public BinaryFloatingPoint div(BinaryFloatingPoint b) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 	public String toString() {
@@ -145,11 +137,11 @@ public class BinaryFloatingPoint {
 		binFloat += this.sign ? "1" : "0";
 		
 		for (int i = 0; i < this.exp.getExpBits(); i++) {
-			binFloat += this.exp.getExp()[i] ? "1" : "0";
+			binFloat += this.exp.getExpBoolArr()[i] ? "1" : "0";
 		}
 		
 		for (int i = 0; i < this.man.getManBits(); i++) {
-			binFloat += this.man.getMan()[i] ? "1" : "0";
+			binFloat += this.man.getManBoolArr()[i] ? "1" : "0";
 		}
 		
 		return binFloat;
@@ -158,29 +150,29 @@ public class BinaryFloatingPoint {
 	public int intValue() {
 		int value = 0;
 		
-		String binExp = BinaryHelper.binBoolArrayToString(this.exp.getExp());
-		String binMan = BinaryHelper.binBoolArrayToString(this.man.getMan());
-		
-		int expDec = BinaryHelper.convBinStringToDecInteger(binExp);
-		int expExp = (int) Math.pow(2, this.exp.getExpBits());
-		
-		int exp = expDec - expExp;
-		if(exp > 0) { // rechtsshift
-			String result = BinaryHelper.shiftLeftBinFloatingPointStringAsStringWithoutSignBit(binMan, Math.abs(exp));
-		} else if(exp < 0) { // linksshift
-			
-		} else {
-			//DO NOTHING
-		}
-			
-		
-		if(this.sign)
-			value *= -1;
+//		String binExp = BinaryHelper.binBoolArrayToString(this.exp.getExp());
+//		String binMan = BinaryHelper.binBoolArrayToString(this.man.getMan());
+//		
+//		int expDec = BinaryHelper.convBinStringToDecInteger(binExp);
+//		int expExp = (int) Math.pow(2, this.exp.getExpBits());
+//		
+//		int exp = expDec - expExp;
+//		if(exp > 0) { // rechtsshift
+//			String result = BinaryHelper.shiftLeftBinFloatingPointStringAsStringWithoutSignBit(binMan, Math.abs(exp));
+//		} else if(exp < 0) { // linksshift
+//			
+//		} else {
+//			//DO NOTHING
+//		}
+//			
+//		
+//		if(this.sign)
+//			value *= -1;
 		return value;
 	}
 	
-	public double floatValue() {
-		return BinaryHelper.convBinFloatingPointToDecFloatingPointString(this.toString(), this.exp.getExpBits());		
+	public double floatValue(boolean asResult) {
+		return BinaryHelper.convBinFloatingPointToDecFloatingPointString(this.toString(), this.exp.getExpBits(),asResult);		
 	}
 	
 	public double doubleValue() {

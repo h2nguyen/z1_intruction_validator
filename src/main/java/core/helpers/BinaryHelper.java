@@ -170,9 +170,7 @@ public class BinaryHelper {
 	public static String shiftLeftBinFloatingPointStringAsStringWithoutSignBit(
 			String bin, int pos) {
 		if (!bin.contains(".")) {
-			while (pos-- > 0) {
-
-			}
+			bin = bin.charAt(0) + "." + bin.substring(1);			
 		}
 
 		char[] bin2 = bin.toCharArray();
@@ -427,7 +425,7 @@ public class BinaryHelper {
 	}
 
 	public static float convBinFloatingPointToDecFloatingPointString(
-			String binAsString, int expLength) {
+			String binAsString, int expLength, boolean asResult) {
 		int bitsLength = 1 + expLength;
 		while (binAsString.length() < bitsLength) {
 			binAsString += "0";
@@ -444,8 +442,9 @@ public class BinaryHelper {
 			else
 				manPart += binAsString.charAt(b);
 		}
-
-		manPart = "1." + manPart;
+		
+		if(!asResult)
+			manPart = "1." + manPart;
 		int exp = BinaryHelper.convBinStringToDecInteger(expPart);
 		exp -= (int) (Math.pow(2, expLength - 1) - 1);
 
@@ -454,6 +453,9 @@ public class BinaryHelper {
 						manPart, Math.abs(exp)) : BinaryHelper
 				.shiftLeftBinFloatingPointStringAsStringWithoutSignBit(manPart,
 						Math.abs(exp));
+		if(binFloatingPoint.equalsIgnoreCase(".0")) {
+			binFloatingPoint = "0"+binFloatingPoint;
+		}
 		String[] binFloatingPointParts = binFloatingPoint.split("[.]");
 
 		float result = BinaryHelper
@@ -575,6 +577,56 @@ public class BinaryHelper {
 
 		return inverseOrder(multiBitAdder.eval(inputs));
 	}
+	
+	public static boolean[] subBinaryBoolArray(boolean[] bin1, boolean[] bin2) {
+		if (bin1.length > bin2.length) {
+			boolean[] newBin2 = new boolean[bin1.length];
+
+			for (int i = 0; i < bin2.length; i++) {
+				newBin2[i] = bin2[i];
+			}
+			bin2 = shiftRight(newBin2, bin1.length - bin2.length);
+			
+			
+		} else if (bin2.length > bin1.length) {
+			boolean[] newBin1 = new boolean[bin2.length];
+
+			for (int i = 0; i < bin1.length; i++) {
+				newBin1[i] = bin1[i];
+			}
+			bin1 = shiftRight(newBin1, bin2.length - bin1.length);
+		}
+		
+		// convert to 2's complement
+		bin2 = twosComplement(bin2);
+		bin2 = removeBitAtPos(bin2,0);
+		
+		MultiGate multiBitAdder = GateLogic.buildAdder(bin1.length);
+	    // Convert input numbers into array of bits
+	    boolean[] inputs = mergeBinaryBoolArray(inverseOrder(bin1),inverseOrder(bin2));
+
+		return inverseOrder(multiBitAdder.eval(inputs));
+	}
+
+	public static boolean[] removeBitAtPos(boolean[] bin, int i) {
+		boolean[] newBin = new boolean[bin.length-1];
+		
+		for (int j = 0, p = 0; j < bin.length; j++) {
+			if(j == i)
+				continue;
+			newBin[p++] = bin[j];
+			
+		}
+		return newBin;
+	}
+
+	private static boolean[] twosComplement(boolean[] bin) {
+		boolean[] complement = new boolean[bin.length];
+		for (int i = 0; i < bin.length; i++) {
+			complement[i] = !bin[i];
+		}
+		return addBinaryBoolArray(complement,new boolean[]{true});
+	}
 
 	private static boolean[] inverseOrder(boolean[] bin) {
 		boolean[] reverse = new boolean[bin.length];
@@ -585,4 +637,29 @@ public class BinaryHelper {
 		
 		return reverse;
 	}
+
+	public static boolean checkSumSign(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+		return (A.isSign() && B.isSign()) ? true :
+			(!A.isSign() && !B.isSign()) ? false :
+				(Math.abs(A.floatValue(false)) >= Math.abs(B.floatValue(false)) && !A.isSign()) ||
+				(Math.abs(A.floatValue(false)) <= Math.abs(B.floatValue(false)) && A.isSign()) ? false : true;
+	}
+	
+	public static boolean checkDifSign(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+		
+		if(A.isSign() && !B.isSign())
+			return true;
+		if(!A.isSign() && B.isSign()) {
+			return false;
+		}
+		
+		if(Math.abs(A.floatValue(false)) > Math.abs(B.floatValue(false))) {
+			if(A.isSign() && B.isSign()) return true;
+		} else if(Math.abs(A.floatValue(false)) < Math.abs(B.floatValue(false))) {
+			if(!A.isSign() && !B.isSign() ) return true;			
+		}
+		
+		return false;
+	}
+
 }

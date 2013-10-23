@@ -2,6 +2,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import core.Operation;
 import core.helpers.BinaryHelper;
 import core.logicgates.GateLogic;
 import core.numbers.BinaryFloatingPoint;
@@ -29,10 +30,13 @@ public class BinaryFloatingPointNumberTestCase {
 //		System.out.println(BinaryHelper.binBoolArrayToString(inputs));
 		
 		
-		BinaryFloatingPoint32Bit bfp32bit1 = new BinaryFloatingPoint32Bit((float)0.00003125);
-		BinaryFloatingPoint32Bit bfp32bit2 = new BinaryFloatingPoint32Bit((float)0);
-		BinaryFloatingPoint result = bfp32bit1.add(bfp32bit2);
-		System.out.println(result.floatValue());
+		BinaryFloatingPoint32Bit bfp32bit1 = new BinaryFloatingPoint32Bit((float)12);
+		BinaryFloatingPoint32Bit bfp32bit2 = new BinaryFloatingPoint32Bit((float)13);
+		
+		
+		float result = (float) new Operation().sub(bfp32bit1, bfp32bit2).floatValue(true);
+		System.out.println(result);
+		
 		
 	}
 	
@@ -45,11 +49,11 @@ public class BinaryFloatingPointNumberTestCase {
 		
 		BinaryFloatingPoint32Bit b32 = new BinaryFloatingPoint32Bit(b);
 		System.out.println(b32.toString());		
-		System.out.println(b32.floatValue());
+		System.out.println(b32.floatValue(false));
 		
 		BinaryFloatingPoint64Bit b64 = new BinaryFloatingPoint64Bit(b);
 		System.out.println(b64.toString());		
-		System.out.println(b64.floatValue());
+		System.out.println(b64.floatValue(false));
 
 	}
 	

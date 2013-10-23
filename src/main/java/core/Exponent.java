@@ -3,16 +3,16 @@ package core;
 public class Exponent {
 
 	private int expBits;	
-	private boolean[] exp;
+	private boolean[] expBoolArr;
 	
 	public Exponent(int expBits) {
 		this.expBits = expBits;
-		this.exp = new boolean[this.expBits];
+		this.expBoolArr = new boolean[this.expBits];
 	}
 	
 	public Exponent(boolean[] exp) {
 		this.expBits = exp.length;
-		this.exp = exp;
+		this.expBoolArr = exp;
 	}
 
 	/**
@@ -32,14 +32,14 @@ public class Exponent {
 	/**
 	 * @return the exp
 	 */
-	public boolean[] getExp() {
-		return exp;
+	public boolean[] getExpBoolArr() {
+		return expBoolArr;
 	}
 
 	/**
 	 * @param exp the exp to set
 	 */
-	public void setExp(boolean[] exp) {
-		this.exp = exp;
+	public void setExpBoolArr(boolean[] exp) {
+		this.expBoolArr = exp;
 	}
 }

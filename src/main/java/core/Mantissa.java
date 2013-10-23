@@ -1,21 +1,19 @@
 package core;
 
-import core.helpers.BinaryHelper;
-
 public class Mantissa {
 
 	private int manBits;
 	
-	private boolean[] man;	
+	private boolean[] manBoolArr;	
 
 	public Mantissa(int manBits) {
 		this.manBits = manBits;		
-		this.setMan(new boolean[this.manBits]);
+		this.setManBoolArr(new boolean[this.manBits]);
 	}
 	
 	public Mantissa(boolean[] man) {
 		this.manBits = man.length;		
-		this.setMan(man);
+		this.setManBoolArr(man);
 	}
 
 	/**
@@ -33,17 +31,19 @@ public class Mantissa {
 	}
 
 	/**
-	 * @return the man
+	 * @return the manBoolArr
 	 */
-	public boolean[] getMan() {
-		return man;
+	public boolean[] getManBoolArr() {
+		return manBoolArr;
 	}
 
 	/**
-	 * @param man the man to set
+	 * @param manBoolArr the manBoolArr to set
 	 */
-	public void setMan(boolean[] man) {
-		this.man = man;
+	public void setManBoolArr(boolean[] manBoolArr) {
+		this.manBoolArr = manBoolArr;
 	}
+
+
 	
 }
