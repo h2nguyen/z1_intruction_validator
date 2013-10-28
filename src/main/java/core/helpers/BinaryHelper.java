@@ -265,7 +265,7 @@ public class BinaryHelper {
 			pos = 0;
 			while (!temp.startsWith("1.")) {
 				if(Math.abs(pos) > maxShift ) {
-					return Integer.MIN_VALUE;
+					return 0;
 				}
 					
 				temp = shiftLeftBinFloatingPointStringAsStringWithoutSignBit(
@@ -443,27 +443,55 @@ public class BinaryHelper {
 				manPart += binAsString.charAt(b);
 		}
 		
-		if(!asResult)
-			manPart = "1." + manPart;
+		
 		int exp = BinaryHelper.convBinStringToDecInteger(expPart);
 		exp -= (int) (Math.pow(2, expLength - 1) - 1);
-
-		String binFloatingPoint = (exp < 0) ? BinaryHelper
-				.shiftRightBinFloatingPointStringAsStringWithoutSignBit(
-						manPart, Math.abs(exp)) : BinaryHelper
-				.shiftLeftBinFloatingPointStringAsStringWithoutSignBit(manPart,
-						Math.abs(exp));
-		if(binFloatingPoint.equalsIgnoreCase(".0")) {
-			binFloatingPoint = "0"+binFloatingPoint;
+		
+		if(exp == 0 && convBinStringToDecInteger(manPart) == 0) {
+			if(asResult)
+				manPart = "1." + manPart;
+			else 
+				manPart = "0." + manPart;
+		} else {
+			if(asResult)
+				manPart = "1." + manPart;
 		}
-		String[] binFloatingPointParts = binFloatingPoint.split("[.]");
 
-		float result = BinaryHelper
-				.convBinStringToDecInteger(binFloatingPointParts[0]);
-		result += BinaryHelper
-				.convBinBehindPointStringToDecInteger(binFloatingPointParts[1]);
-		if (signPart.charAt(0) == '1')
+
+//		String binFloatingPoint = (exp < 0) ? BinaryHelper
+//				.shiftRightBinFloatingPointStringAsStringWithoutSignBit(
+//						manPart, Math.abs(exp)) : BinaryHelper
+//				.shiftLeftBinFloatingPointStringAsStringWithoutSignBit(manPart,
+//						Math.abs(exp));
+		
+		String binFloatingPoint = "";
+		
+		if(exp < 0) {
+			binFloatingPoint = BinaryHelper.shiftRightBinFloatingPointStringAsStringWithoutSignBit(manPart, Math.abs(exp));
+		} else if(exp > 0) {
+			binFloatingPoint = BinaryHelper.shiftLeftBinFloatingPointStringAsStringWithoutSignBit(manPart, Math.abs(exp));
+		} else {
+			binFloatingPoint = BinaryHelper.shiftRightBinFloatingPointStringAsStringWithoutSignBit(manPart, Math.abs(0));
+		}
+						
+		String[] binFloatingPointParts = binFloatingPoint.split("[.]");
+		
+		if(binFloatingPointParts[0].isEmpty())
+			binFloatingPointParts[0] = "0";
+		if(binFloatingPointParts[1].isEmpty())
+			binFloatingPointParts[1] = "0";
+		
+		float result = 0;
+		if (signPart.charAt(0) == '1') {
+			binFloatingPointParts[0] = binBoolArrayToString(twosComplement(binStringToBoolArray(binFloatingPointParts[0])));
+			result = BinaryHelper.convBinStringToDecInteger(binFloatingPointParts[0]);
+			result += BinaryHelper.convBinBehindPointStringToDecInteger(binFloatingPointParts[1]);
 			result *= -1.0;
+		} else {
+			result = BinaryHelper.convBinStringToDecInteger(binFloatingPointParts[0]);
+			result += BinaryHelper.convBinBehindPointStringToDecInteger(binFloatingPointParts[1]);
+		}
+			
 		return result;
 	}
 
@@ -513,7 +541,7 @@ public class BinaryHelper {
 	public static boolean isBinary(String num) {
 		return num.matches("^[0-1]*[.]{0,1}[0-1]*");
 	}
-
+	
 	public static boolean[] shiftRight(boolean[] arr, int d) {
 		boolean[] arrS = new boolean[arr.length];
 		
@@ -525,6 +553,13 @@ public class BinaryHelper {
 				arrS[i] = arr[i - d];
 			}
 		}
+
+		return arrS;
+	}
+	
+	public static boolean[] shiftRightFillOne(boolean[] arr, int d) {
+		boolean[] arrS = shiftRight(arr,d);
+		arrS[0] = true;
 
 		return arrS;
 	}
@@ -620,7 +655,7 @@ public class BinaryHelper {
 		return newBin;
 	}
 
-	private static boolean[] twosComplement(boolean[] bin) {
+	public static boolean[] twosComplement(boolean[] bin) {
 		boolean[] complement = new boolean[bin.length];
 		for (int i = 0; i < bin.length; i++) {
 			complement[i] = !bin[i];
@@ -653,9 +688,12 @@ public class BinaryHelper {
 			return false;
 		}
 		
-		if(Math.abs(A.floatValue(false)) > Math.abs(B.floatValue(false))) {
+		float a = (float) Math.abs(A.floatValue(false));
+		float b = (float) Math.abs(B.floatValue(false)); 
+		
+		if( a > b ) {
 			if(A.isSign() && B.isSign()) return true;
-		} else if(Math.abs(A.floatValue(false)) < Math.abs(B.floatValue(false))) {
+		} else if( a < b ) {
 			if(!A.isSign() && !B.isSign() ) return true;			
 		}
 		

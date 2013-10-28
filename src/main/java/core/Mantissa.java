@@ -2,46 +2,46 @@ package core;
 
 public class Mantissa {
 
-	private int manBits;
+	private int bits;
 	
-	private boolean[] manBoolArr;	
+	private boolean[] boolArr;	
 
-	public Mantissa(int manBits) {
-		this.manBits = manBits;		
-		this.setManBoolArr(new boolean[this.manBits]);
+	public Mantissa(int bits) {
+		this.bits = bits;		
+		this.setBoolArr(new boolean[this.bits]);
 	}
 	
 	public Mantissa(boolean[] man) {
-		this.manBits = man.length;		
-		this.setManBoolArr(man);
+		this.bits = man.length;		
+		this.setBoolArr(man);
 	}
 
 	/**
-	 * @return the manBits
+	 * @return the bits
 	 */
-	public int getManBits() {
-		return manBits;
+	public int getBits() {
+		return bits;
 	}
 
 	/**
-	 * @param manBits the manBits to set
+	 * @param bits the bits to set
 	 */
-	public void setManBits(int manBits) {
-		this.manBits = manBits;
+	public void setBits(int bits) {
+		this.bits = bits;
 	}
 
 	/**
-	 * @return the manBoolArr
+	 * @return the boolArr
 	 */
-	public boolean[] getManBoolArr() {
-		return manBoolArr;
+	public boolean[] getBoolArr() {
+		return boolArr;
 	}
 
 	/**
-	 * @param manBoolArr the manBoolArr to set
+	 * @param boolArr the boolArr to set
 	 */
-	public void setManBoolArr(boolean[] manBoolArr) {
-		this.manBoolArr = manBoolArr;
+	public void setBoolArr(boolean[] boolArr) {
+		this.boolArr = boolArr;
 	}
 
 

@@ -2,44 +2,44 @@ package core;
 
 public class Exponent {
 
-	private int expBits;	
-	private boolean[] expBoolArr;
+	private int bits;	
+	private boolean[] boolArr;
 	
-	public Exponent(int expBits) {
-		this.expBits = expBits;
-		this.expBoolArr = new boolean[this.expBits];
+	public Exponent(int bits) {
+		this.bits = bits;
+		this.boolArr = new boolean[this.bits];
 	}
 	
 	public Exponent(boolean[] exp) {
-		this.expBits = exp.length;
-		this.expBoolArr = exp;
+		this.bits = exp.length;
+		this.boolArr = exp;
 	}
 
 	/**
-	 * @return the expBits
+	 * @return the bits
 	 */		
-	public int getExpBits() {
-		return expBits;
+	public int getBits() {
+		return bits;
 	}
 
 	/**
-	 * @param expBits the expBits to set
+	 * @param bits the bits to set
 	 */
-	public void setExpBits(int expBits) {
-		this.expBits = expBits;
+	public void setBits(int bits) {
+		this.bits = bits;
 	}
 
 	/**
 	 * @return the exp
 	 */
-	public boolean[] getExpBoolArr() {
-		return expBoolArr;
+	public boolean[] getBoolArr() {
+		return boolArr;
 	}
 
 	/**
 	 * @param exp the exp to set
 	 */
-	public void setExpBoolArr(boolean[] exp) {
-		this.expBoolArr = exp;
+	public void setBoolArr(boolean[] exp) {
+		this.boolArr = exp;
 	}
 }

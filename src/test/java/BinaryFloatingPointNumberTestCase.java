@@ -30,12 +30,13 @@ public class BinaryFloatingPointNumberTestCase {
 //		System.out.println(BinaryHelper.binBoolArrayToString(inputs));
 		
 		
-		BinaryFloatingPoint32Bit bfp32bit1 = new BinaryFloatingPoint32Bit((float)12);
-		BinaryFloatingPoint32Bit bfp32bit2 = new BinaryFloatingPoint32Bit((float)13);
+		BinaryFloatingPoint32Bit bfp32bit1 = new BinaryFloatingPoint32Bit((float)-0.1);
+		BinaryFloatingPoint32Bit bfp32bit2 = new BinaryFloatingPoint32Bit((float)0.1);
 		
 		
-		float result = (float) new Operation().sub(bfp32bit1, bfp32bit2).floatValue(true);
+		float result = (float) new Operation().add(bfp32bit1, bfp32bit2).floatValue(true);
 		System.out.println(result);
+//		System.out.println(BinaryFloatingPoint.DF.format(result).toString().replace(",", "."));
 		
 		
 	}

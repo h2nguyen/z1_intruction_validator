@@ -22,6 +22,11 @@ public class BinaryFloatingPoint {
 	protected Exponent exp;
 	protected Mantissa man;
 	
+	public BinaryFloatingPoint(Exponent exp, Mantissa man) {		
+		this.sign = false;
+		this.exp = exp;
+		this.man = man;
+	}
 	
 	public BinaryFloatingPoint(boolean sign, int expBits, int manBits) {
 		this.sign = sign;
@@ -94,20 +99,20 @@ public class BinaryFloatingPoint {
 
 	private void setNumber(String bin) {
 		//if(!BinaryHelper.isBinary(bin)) {
-			bin = BinaryHelper.convDecFloatingPointToBinFloatingPointString(bin, this.exp.getExpBits());
+			bin = BinaryHelper.convDecFloatingPointToBinFloatingPointString(bin, this.exp.getBits());
 //		}
 		for(int i = 0; i < bin.length(); i++) {
 			if(i == 0) {
 				if(bin.charAt(i) == '1') {
 					this.sign = true;
 				}
-			} else if(i < (1 + this.exp.getExpBits())) {
+			} else if(i < (1 + this.exp.getBits())) {
 				if(bin.charAt(i) == '1') {
-					this.exp.getExpBoolArr()[i-1] = true;
+					this.exp.getBoolArr()[i-1] = true;
 				}
-			} else if(i < (1 + this.exp.getExpBits() + this.man.getManBits())) {
+			} else if(i < (1 + this.exp.getBits() + this.man.getBits())) {
 				if(bin.charAt(i) == '1') {
-					this.man.getManBoolArr()[i-1-this.exp.getExpBits()] = true;
+					this.man.getBoolArr()[i-1-this.exp.getBits()] = true;
 				}
 			}
 		}
@@ -136,12 +141,12 @@ public class BinaryFloatingPoint {
 		String binFloat = "";
 		binFloat += this.sign ? "1" : "0";
 		
-		for (int i = 0; i < this.exp.getExpBits(); i++) {
-			binFloat += this.exp.getExpBoolArr()[i] ? "1" : "0";
+		for (int i = 0; i < this.exp.getBits(); i++) {
+			binFloat += this.exp.getBoolArr()[i] ? "1" : "0";
 		}
 		
-		for (int i = 0; i < this.man.getManBits(); i++) {
-			binFloat += this.man.getManBoolArr()[i] ? "1" : "0";
+		for (int i = 0; i < this.man.getBits(); i++) {
+			binFloat += this.man.getBoolArr()[i] ? "1" : "0";
 		}
 		
 		return binFloat;
@@ -172,7 +177,7 @@ public class BinaryFloatingPoint {
 	}
 	
 	public double floatValue(boolean asResult) {
-		return BinaryHelper.convBinFloatingPointToDecFloatingPointString(this.toString(), this.exp.getExpBits(),asResult);		
+		return BinaryHelper.convBinFloatingPointToDecFloatingPointString(this.toString(), this.exp.getBits(),asResult);		
 	}
 	
 	public double doubleValue() {
@@ -192,7 +197,7 @@ public class BinaryFloatingPoint {
 	}
 	
 	public String decFloat2BinFloat(String decAsString) {
-		return BinaryFloatingPoint.decFloat2BinFloat(this.exp.getExpBits(), this.man.getManBits(), decAsString);
+		return BinaryFloatingPoint.decFloat2BinFloat(this.exp.getBits(), this.man.getBits(), decAsString);
 	}
 	
 	public static String decFloat2BinFloat(int exp, int man, String decAsString) {
