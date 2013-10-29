@@ -22,6 +22,12 @@ public class BinaryFloatingPoint {
 	protected Exponent exp;
 	protected Mantissa man;
 	
+	public BinaryFloatingPoint(BinaryFloatingPoint bfp) {
+		this.sign = bfp.isSign();
+		this.exp = bfp.getCopiedExp();
+		this.man = bfp.getCopiedMan();
+	}	
+
 	public BinaryFloatingPoint(Exponent exp, Mantissa man) {		
 		this.sign = false;
 		this.exp = exp;
@@ -95,6 +101,14 @@ public class BinaryFloatingPoint {
 	 */
 	public void setMan(Mantissa man) {
 		this.man = man;
+	}
+	
+	private Exponent getCopiedExp() {
+		return new Exponent(this.exp.getCopiedBoolArr());
+	}
+	
+	private Mantissa getCopiedMan() {
+		return new Mantissa(this.man.getCopiedBoolArr());
 	}
 
 	private void setNumber(String bin) {

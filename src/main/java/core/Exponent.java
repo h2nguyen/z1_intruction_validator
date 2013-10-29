@@ -42,4 +42,12 @@ public class Exponent {
 	public void setBoolArr(boolean[] exp) {
 		this.boolArr = exp;
 	}
+
+	public boolean[] getCopiedBoolArr() {
+		boolean[] arr = new boolean[this.boolArr.length];
+		for (int i = 0; i < arr.length; i++) {
+			arr[i] = this.boolArr[i];
+		}
+		return arr;
+	}
 }

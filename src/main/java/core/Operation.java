@@ -15,7 +15,7 @@ public class Operation implements IArithmeticOperations {
 		// select larges exponent
 		boolean[] expLargest = (d > 0) ? B.getExp().getBoolArr() : A.getExp().getBoolArr(); 
 		
-		// Shift mantissa of the smaller number d times to the right;
+		// Shift mantissa of the smaller number d times to the right; increase the exponent
 		boolean[] manBig = null;
 		boolean[] manSmall = null;
 
@@ -30,42 +30,48 @@ public class Operation implements IArithmeticOperations {
 		// Add the mantissas
 		boolean[] manSum = BinaryHelper.addBinaryBoolArray(manBig, manSmall);
 		
-		// re-normalize the mantissa and exponent
-		
+		// normalize the mantissa and exponent
 		if(manSum[0] == false) {
 			manSum = BinaryHelper.removeBitAtPos(manSum, 0);
 		}
 		
 		if(manSum.length > manBig.length) {
 			expLargest = BinaryHelper.addBinaryBoolArray(expLargest, new boolean[]{true});
-			
 			while(expLargest.length > A.getExp().getBits()) {
 				expLargest = BinaryHelper.removeBitAtPos(expLargest, 0);
 				if(manSum.length > A.getMan().getBits()) {
 					manSum = BinaryHelper.removeBitAtPos(manSum, manSum.length - 1);
 				}
 			}
-			
 		}
-		
 		while(manSum.length > A.getMan().getBits()) {
 			manSum = BinaryHelper.removeBitAtPos(manSum, 0);			
 		}
+		
 		
 		return new BinaryFloatingPoint(new Exponent(expLargest), new Mantissa(manSum));
 	}
 	
 	@Override
 	public BinaryFloatingPoint add(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+		
+		BinaryFloatingPoint ATmp = new BinaryFloatingPoint(A);
+		BinaryFloatingPoint BTmp = new BinaryFloatingPoint(B);
+		
 		if(A.isSign())
-			A = _2sComplement(A);
+			ATmp = _2sComplement(ATmp);
 		if(B.isSign())
-			B = _2sComplement(B);
+			BTmp = _2sComplement(BTmp);
 		
 		// check the sign
 		boolean sign = BinaryHelper.checkSumSign(A, B);
 		
-		BinaryFloatingPoint bfp = adder(A,B);
+		BinaryFloatingPoint bfp = adder(ATmp,BTmp);
+		
+		if(A.isSign() || B.isSign()) {
+			bfp = _2sComplement(bfp);
+		}
+		
 		bfp.setSign(sign);
 		
 		return bfp;
@@ -147,10 +153,21 @@ public class Operation implements IArithmeticOperations {
 	}
 	
 	private BinaryFloatingPoint _2sComplement(BinaryFloatingPoint num) {
-		boolean sign = !num.isSign();
+		boolean sign = num.isSign();
 		
-		boolean exp[] = BinaryHelper.twosComplement(num.getExp().getBoolArr());
-		boolean man[] = BinaryHelper.twosComplement(num.getMan().getBoolArr());
+		boolean exp[] = num.getExp().getCopiedBoolArr();
+		boolean man[] = BinaryHelper.twosComplement(num.getMan().getCopiedBoolArr());
+		
+		while(man.length > num.getMan().getBoolArr().length) {
+			man = BinaryHelper.removeBitAtPos(man, man.length - 1);
+			exp = BinaryHelper.addBinaryBoolArray(exp, new boolean[]{true});
+			while(exp.length > num.getExp().getBoolArr().length) {
+				exp = BinaryHelper.removeBitAtPos(exp, exp.length - 1);
+			}
+		}
+		
+		if(man[0])
+			sign = !num.isSign();
 		
 		return new BinaryFloatingPoint(sign, new Exponent(exp), new Mantissa(man));
 	}
