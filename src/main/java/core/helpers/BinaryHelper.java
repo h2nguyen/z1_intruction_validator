@@ -700,4 +700,12 @@ public class BinaryHelper {
 		return false;
 	}
 
+	public static boolean checkMulSign(BinaryFloatingPoint a,
+			BinaryFloatingPoint b) {
+		if(a.isSign() && b.isSign() || !a.isSign() && !b.isSign())
+			return false;
+		
+		return true;
+	}
+
 }

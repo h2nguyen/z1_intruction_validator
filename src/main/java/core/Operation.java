@@ -4,13 +4,13 @@ import core.helpers.BinaryHelper;
 import core.numbers.BinaryFloatingPoint;
 
 public class Operation implements IArithmeticOperations {
-
+	
 	public BinaryFloatingPoint adder(BinaryFloatingPoint A, BinaryFloatingPoint B) {
 		
 		// determine the difference D of the exponents
-		int bfpExp = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(B.getExp().getBoolArr()));
-		int thisExp = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(A.getExp().getBoolArr()));
-		int d = bfpExp-thisExp;
+		int aExp = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(A.getExp().getBoolArr()));
+		int bExp = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(B.getExp().getBoolArr()));
+		int d = bExp-aExp;
 		
 		// select larges exponent
 		boolean[] expLargest = (d > 0) ? B.getExp().getBoolArr() : A.getExp().getBoolArr(); 
@@ -20,6 +20,7 @@ public class Operation implements IArithmeticOperations {
 		boolean[] manSmall = null;
 
 		if(d > 0) {
+			// add the hidden bit
 			manBig = BinaryHelper.mergeBinaryBoolArray(new boolean[]{true}, B.getMan().getBoolArr());
 			manSmall = BinaryHelper.shiftRight(BinaryHelper.mergeBinaryBoolArray(new boolean[]{true}, A.getMan().getBoolArr()), Math.abs(d));
 		} else {
@@ -52,6 +53,65 @@ public class Operation implements IArithmeticOperations {
 		return new BinaryFloatingPoint(new Exponent(expLargest), new Mantissa(manSum));
 	}
 	
+	public BinaryFloatingPoint adder2(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+		
+		// determine the difference d of the exponents
+		boolean[] aExp = A.getExp().getBoolArr();
+		boolean[] bExp = B.getExp().getBoolArr();
+		boolean[] d = BinaryHelper.twosComplement(BinaryHelper.subBinaryBoolArray(aExp, bExp));
+		
+		// normalize after subtraction
+		while(d.length > bExp.length + 1) 
+			d = BinaryHelper.removeBitAtPos(d, 0);
+		
+		if(d.length == bExp.length + 1) { // check sign of difference
+			if(d[0]) { // exponent difference is negative
+				
+			}
+		}
+		
+		return null;
+//		// select larges exponent
+//		boolean[] expLargest = (d > 0) ? B.getExp().getBoolArr() : A.getExp().getBoolArr(); 
+//		
+//		// Shift mantissa of the smaller number d times to the right; increase the exponent
+//		boolean[] manBig = null;
+//		boolean[] manSmall = null;
+//
+//		if(d > 0) {
+//			// add the hidden bit
+//			manBig = BinaryHelper.mergeBinaryBoolArray(new boolean[]{true}, B.getMan().getBoolArr());
+//			manSmall = BinaryHelper.shiftRight(BinaryHelper.mergeBinaryBoolArray(new boolean[]{true}, A.getMan().getBoolArr()), Math.abs(d));
+//		} else {
+//			manBig = BinaryHelper.mergeBinaryBoolArray(new boolean[]{true}, A.getMan().getBoolArr());
+//			manSmall = BinaryHelper.shiftRight(BinaryHelper.mergeBinaryBoolArray(new boolean[]{true}, B.getMan().getBoolArr()), Math.abs(d));
+//		}
+//		
+//		// Add the mantissas
+//		boolean[] manSum = BinaryHelper.addBinaryBoolArray(manBig, manSmall);
+//		
+//		// normalize the mantissa and exponent
+//		if(manSum[0] == false) {
+//			manSum = BinaryHelper.removeBitAtPos(manSum, 0);
+//		}
+//		
+//		if(manSum.length > manBig.length) {
+//			expLargest = BinaryHelper.addBinaryBoolArray(expLargest, new boolean[]{true});
+//			while(expLargest.length > A.getExp().getBits()) {
+//				expLargest = BinaryHelper.removeBitAtPos(expLargest, 0);
+//				if(manSum.length > A.getMan().getBits()) {
+//					manSum = BinaryHelper.removeBitAtPos(manSum, manSum.length - 1);
+//				}
+//			}
+//		}
+//		while(manSum.length > A.getMan().getBits()) {
+//			manSum = BinaryHelper.removeBitAtPos(manSum, 0);			
+//		}
+//		
+//		
+//		return new BinaryFloatingPoint(new Exponent(expLargest), new Mantissa(manSum));
+	}
+	
 	@Override
 	public BinaryFloatingPoint add(BinaryFloatingPoint A, BinaryFloatingPoint B) {
 		
@@ -68,7 +128,7 @@ public class Operation implements IArithmeticOperations {
 		
 		BinaryFloatingPoint bfp = adder(ATmp,BTmp);
 		
-		if(A.isSign() || B.isSign()) {
+		if(bfp.isSign()) {
 			bfp = _2sComplement(bfp);
 		}
 		
@@ -142,9 +202,44 @@ public class Operation implements IArithmeticOperations {
 //		return result;
 //	}
 
+	public BinaryFloatingPoint multip(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+		// adding the exponents
+		boolean[] expLargest = BinaryHelper.addBinaryBoolArray(A.getExp().getBoolArr(), B.getExp().getBoolArr());
+				
+		for (int i = 0; i < A.getMan().getBits() + 2; i++) {
+			
+		}
+		
+		return new BinaryFloatingPoint(A.mul(B));
+	}
+	
 	@Override
 	public BinaryFloatingPoint mul(BinaryFloatingPoint A, BinaryFloatingPoint B) {
-		return A.mul(B);
+		// get sign
+		boolean sign = BinaryHelper.checkMulSign(A, B);
+		
+		// adding the exponents
+		boolean[] expLargest = BinaryHelper.addBinaryBoolArray(A.getExp().getBoolArr(), B.getExp().getBoolArr());
+		
+
+		boolean[] tmpB = B.getMan().getCopiedBoolArr();
+		
+		boolean[] partialResult = new boolean[B.getMan().getBoolArr().length];
+		
+		for (int i = 0; i < tmpB.length; i++) {
+					
+			boolean shiftOutBit = tmpB[tmpB.length - 1];
+			
+			boolean[] a = BinaryHelper.shiftRight(A.getMan().getBoolArr(), i);
+			
+			if(shiftOutBit) {
+				partialResult = BinaryHelper.addBinaryBoolArray(partialResult, a);
+			}
+			
+			tmpB = BinaryHelper.shiftRight(tmpB, i);
+		}		
+		
+		return new BinaryFloatingPoint(sign, new Exponent(expLargest), new Mantissa(partialResult));
 	}
 
 	@Override
