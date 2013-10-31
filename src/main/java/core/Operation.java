@@ -1,11 +1,11 @@
 package core;
 
 import core.helpers.BinaryHelper;
-import core.numbers.BinaryFloatingPoint;
+import core.numbers.ZuseBinaryFloatingPoint24Bit;
 
 public class Operation implements IArithmeticOperations {
 	
-	public BinaryFloatingPoint adder(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+	public ZuseBinaryFloatingPoint24Bit adder(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B) {
 		
 		// determine the difference D of the exponents
 		int aExp = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(A.getExp().getBoolArr()));
@@ -50,25 +50,162 @@ public class Operation implements IArithmeticOperations {
 		}
 		
 		
-		return new BinaryFloatingPoint(new Exponent(expLargest), new Mantissa(manSum));
+		return new ZuseBinaryFloatingPoint24Bit(new Exponent(expLargest), new Mantissa(manSum));
 	}
 	
-	public BinaryFloatingPoint adder2(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+	public ZuseBinaryFloatingPoint24Bit adder2(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B) {
+		
+		boolean[] Af = A.getExp().getCopiedBoolArr();
+		boolean[] Ag = B.getExp().getCopiedBoolArr();
+		boolean[] Bf = A.getMan().getCopiedBoolArr();
+		boolean[] Bg = B.getMan().getCopiedBoolArr();
+		
+		
+		boolean[] Aa = new boolean[ZuseBinaryFloatingPoint24Bit.EXPONENT];
+		boolean[] Ab = new boolean[ZuseBinaryFloatingPoint24Bit.EXPONENT];
+		boolean[] Ba = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
+		boolean[] Bb = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
+		
+		
+		boolean[] Ae = null;
+		boolean[] Be = null;
+		
+		boolean s0 = false;
+		boolean s1 = false;
+		boolean s3 = false;
+		
+		boolean ph = false;
+		boolean lz = false;
 		
 		// determine the difference d of the exponents
-		boolean[] aExp = A.getExp().getBoolArr();
-		boolean[] bExp = B.getExp().getBoolArr();
-		boolean[] d = BinaryHelper.twosComplement(BinaryHelper.subBinaryBoolArray(aExp, bExp));
+		while (!ph) {
+			Aa = copy(Af);			
+			Ab = neg(Ag);
+			
+			ph = true;
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);		
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE + 1);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 0
 		
-		// normalize after subtraction
-		while(d.length > bExp.length + 1) 
-			d = BinaryHelper.removeBitAtPos(d, 0);
+		ph = false;
 		
-		if(d.length == bExp.length + 1) { // check sign of difference
-			if(d[0]) { // exponent difference is negative
-				
+		while (!ph) {
+			if(Ae[0])
+				s1 = true;
+			else 
+				s1 = false;
+			Aa = copy(Ae);
+
+			ph = true;
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);		
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE + 1);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 1
+		
+		ph = false;
+		
+		// check if exponent is greater equal zero
+		while (!ph) {
+			if(s1) {
+				Aa = copy(Ae);
+				Bb = copy(Bg);
+				ph = true;
+			} else {
+				Aa = neg(Ae);
+				Bb = copy(Bf);
+				ph = true;
 			}
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);		
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE + 1);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 2
+
+		ph = false;
+		
+		while (!ph) {
+			int ae = bin2dec(Ae);
+			if(ae == 0) {
+				Aa = copy(Ae);
+				Ba = copy(Be);
+				//Ae = BinaryHelper.shiftRight(Ae, 1);
+				ph = true;
+			} else {
+				Aa = copy(Ae);
+				Ab = _minus1();
+				Bb = BinaryHelper.shiftRight(Be,1);				
+			}
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);		
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE + 1);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 3
+		
+		ph = false;
+		
+		while (!ph) {
+			if(s0) {
+				Ba = neg(Be);
+			} else {
+				Ba = copy(Be);
+			}
+			
+			if(s1) {
+				Aa = copy(Af);
+				Bb = copy(Bf);
+				ph = true;
+			} else {
+				Ab = copy(Ag);
+				Bb = copy(Bg);
+				ph = true;
+			}
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);		
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE + 1);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 4
+		
+		ph = false;
+
+		while (!ph) {
+			// Be[0] ^= Be_1; Be[1] ^= Be_0; Be[2] ^= Be_-1 ...
+			if(!Be[0]) {
+				Aa = copy(Ae);
+				Ba = copy(Be);
+				//GOTO ende;
+				lz = true;
+				break;
+			} else {
+				Aa = copy(Ae);
+				Ab = _plus1();
+				Bb = BinaryHelper.shiftRight(Be, 1);
+			}
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);		
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE + 1);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 5
+		
+		if(lz) {
+			return new ZuseBinaryFloatingPoint24Bit(new Exponent(Ae), new Mantissa(Be));
 		}
+		
+		ph = false;
+//		if(Ae.length == Ab.length + 1) { // check sign of difference
+//			boolean sign = Ae[0];
+//			while(Ae.length > Ab.length) 
+//				Ae = BinaryHelper.removeBitAtPos(Ae, 0);
+//			int s2 = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(Ae));
+//			
+//			if(sign && s2 >= 0) { // exponent difference is positive
+//				Aa = Ae;
+//				Bb = B.getMan().getBoolArr();
+//			} else {
+//				Aa = BinaryHelper.twosComplement(Ae);
+//				Bb = A.getMan().getBoolArr();
+//			}
+//		}
 		
 		return null;
 //		// select larges exponent
@@ -109,14 +246,62 @@ public class Operation implements IArithmeticOperations {
 //		}
 //		
 //		
-//		return new BinaryFloatingPoint(new Exponent(expLargest), new Mantissa(manSum));
+//		return new ZuseBinaryFloatingPoint24Bit(new Exponent(expLargest), new Mantissa(manSum));
 	}
 	
-	@Override
-	public BinaryFloatingPoint add(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+
+
+	private boolean[] copy(boolean[] arr) {
+		boolean[] copied = new boolean[arr.length];
 		
-		BinaryFloatingPoint ATmp = new BinaryFloatingPoint(A);
-		BinaryFloatingPoint BTmp = new BinaryFloatingPoint(B);
+		for (int i = 0; i < copied.length; i++) {
+			copied[i] = arr[i];
+		}
+		return copied;
+	}
+
+	private int bin2dec(boolean[] bin) {
+		boolean sign = bin[0];
+		
+		boolean[] newBin = BinaryHelper.removeBitAtPos(bin, 0);
+		
+		int dec = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(newBin));
+		
+		if(!sign)
+			dec *= -1.0;
+			
+		return dec;
+	}
+	
+	private boolean[] _plus1() {
+		return new boolean[]{false, false, false, false, false, false, true};
+	}
+
+	private boolean[] _minus1() {
+		return BinaryHelper.twosComplement(_plus1());
+	}
+
+	private boolean[] neg(boolean[] ar) {
+		return BinaryHelper.twosComplement(ar);
+	}
+
+	private void reset(boolean[] aa, boolean[] ab, boolean[] ba, boolean[] bb) {
+		resetArray(aa);
+		resetArray(ab);
+		resetArray(ba);
+		resetArray(bb);
+	}
+	
+	private void resetArray(boolean[] array) {
+		for (int a = 0; a < array.length; a++) {
+			array[a] = false;
+		}
+	}
+
+	public ZuseBinaryFloatingPoint24Bit add(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B) {
+		
+		ZuseBinaryFloatingPoint24Bit ATmp = new ZuseBinaryFloatingPoint24Bit(A);
+		ZuseBinaryFloatingPoint24Bit BTmp = new ZuseBinaryFloatingPoint24Bit(B);
 		
 		if(A.isSign())
 			ATmp = _2sComplement(ATmp);
@@ -124,9 +309,9 @@ public class Operation implements IArithmeticOperations {
 			BTmp = _2sComplement(BTmp);
 		
 		// check the sign
-		boolean sign = BinaryHelper.checkSumSign(A, B);
+		boolean sign = BinaryHelper.zuseCheckSumSign(A, B);
 		
-		BinaryFloatingPoint bfp = adder(ATmp,BTmp);
+		ZuseBinaryFloatingPoint24Bit bfp = adder(ATmp,BTmp);
 		
 		if(bfp.isSign()) {
 			bfp = _2sComplement(bfp);
@@ -137,16 +322,15 @@ public class Operation implements IArithmeticOperations {
 		return bfp;
 	}
 	
-	@Override
-	public BinaryFloatingPoint sub(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+	public ZuseBinaryFloatingPoint24Bit sub(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B) {
 		if(A.isSign())
 			A = _2sComplement(A);
 		
 		B = _2sComplement(B);
 		
-		boolean sign = BinaryHelper.checkDifSign(A, B);
+		boolean sign = BinaryHelper.zuseCheckDifSign(A, B);
 		
-		BinaryFloatingPoint bfp = add(A,B);
+		ZuseBinaryFloatingPoint24Bit bfp = add(A,B);
 		bfp.setSign(sign);
 		return bfp;
 		
@@ -154,7 +338,7 @@ public class Operation implements IArithmeticOperations {
 	
 	
 //	@Override
-//	public BinaryFloatingPoint sub(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+//	public ZuseBinaryFloatingPoint24Bit sub(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B) {
 //		// check the sign
 //		boolean sign = BinaryHelper.checkDifSign(A, B);
 //		
@@ -197,31 +381,19 @@ public class Operation implements IArithmeticOperations {
 //		}
 //		
 //		// set the sign of the result
-//		BinaryFloatingPoint result = new BinaryFloatingPoint(sign, new Exponent(expLargest), new Mantissa(manDiff));
+//		ZuseBinaryFloatingPoint24Bit result = new ZuseBinaryFloatingPoint24Bit(sign, new Exponent(expLargest), new Mantissa(manDiff));
 //		
 //		return result;
 //	}
 
-	public BinaryFloatingPoint multip(BinaryFloatingPoint A, BinaryFloatingPoint B) {
-		// adding the exponents
-		boolean[] expLargest = BinaryHelper.addBinaryBoolArray(A.getExp().getBoolArr(), B.getExp().getBoolArr());
-				
-		for (int i = 0; i < A.getMan().getBits() + 2; i++) {
-			
-		}
-		
-		return new BinaryFloatingPoint(A.mul(B));
-	}
-	
-	@Override
-	public BinaryFloatingPoint mul(BinaryFloatingPoint A, BinaryFloatingPoint B) {
+	public ZuseBinaryFloatingPoint24Bit mul(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B) {
 		// get sign
-		boolean sign = BinaryHelper.checkMulSign(A, B);
+		boolean sign = BinaryHelper.zuseCheckMulSign(A, B);
 		
 		// adding the exponents
 		boolean[] expLargest = BinaryHelper.addBinaryBoolArray(A.getExp().getBoolArr(), B.getExp().getBoolArr());
 		
-
+	
 		boolean[] tmpB = B.getMan().getCopiedBoolArr();
 		
 		boolean[] partialResult = new boolean[B.getMan().getBoolArr().length];
@@ -239,15 +411,25 @@ public class Operation implements IArithmeticOperations {
 			tmpB = BinaryHelper.shiftRight(tmpB, i);
 		}		
 		
-		return new BinaryFloatingPoint(sign, new Exponent(expLargest), new Mantissa(partialResult));
+		return new ZuseBinaryFloatingPoint24Bit(sign, new Exponent(expLargest), new Mantissa(partialResult));
 	}
 
-	@Override
-	public BinaryFloatingPoint div(BinaryFloatingPoint A, BinaryFloatingPoint B) {
-		return A.div(B);
+	public ZuseBinaryFloatingPoint24Bit multip(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B) {
+		// adding the exponents
+		boolean[] expLargest = BinaryHelper.addBinaryBoolArray(A.getExp().getBoolArr(), B.getExp().getBoolArr());
+				
+		for (int i = 0; i < A.getMan().getBits() + 2; i++) {
+			
+		}
+		
+		return null;
 	}
 	
-	private BinaryFloatingPoint _2sComplement(BinaryFloatingPoint num) {
+	public ZuseBinaryFloatingPoint24Bit div(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B) {
+		return null;
+	}
+	
+	private ZuseBinaryFloatingPoint24Bit _2sComplement(ZuseBinaryFloatingPoint24Bit num) {
 		boolean sign = num.isSign();
 		
 		boolean exp[] = num.getExp().getCopiedBoolArr();
@@ -264,7 +446,7 @@ public class Operation implements IArithmeticOperations {
 		if(man[0])
 			sign = !num.isSign();
 		
-		return new BinaryFloatingPoint(sign, new Exponent(exp), new Mantissa(man));
+		return new ZuseBinaryFloatingPoint24Bit(sign, new Exponent(exp), new Mantissa(man));
 	}
 
 }

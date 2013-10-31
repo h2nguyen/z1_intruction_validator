@@ -7,56 +7,60 @@ import core.Mantissa;
 import core.Operation;
 import core.helpers.BinaryHelper;
 
-public class BinaryFloatingPoint {
-	
+public class ZuseBinaryFloatingPoint24Bit {
 	public static DecimalFormat DF = new DecimalFormat("############################################.########################################################################################");
-	
-	public static final int MAXSHIFT = 64;
-//	protected int expBits;
-//	protected int manBits;
-	
-//	protected boolean[] exp; 
-//	protected boolean[] man;
+	public static final int EXPONENT = 7;
+	public static final int MANTISSE = 16;
+	public static final int MAXSHIFT = 16;
 	
 	protected boolean sign;
 	protected Exponent exp;
 	protected Mantissa man;
 	
-	public BinaryFloatingPoint(BinaryFloatingPoint bfp) {
+	public ZuseBinaryFloatingPoint24Bit(String bin) {
+		this(EXPONENT,MANTISSE,bin);		
+	}
+
+	public ZuseBinaryFloatingPoint24Bit(float num) {
+		this(DF.format(num).toString().replace(",", "."));
+	}
+
+	
+	public ZuseBinaryFloatingPoint24Bit(ZuseBinaryFloatingPoint24Bit bfp) {
 		this.sign = bfp.isSign();
 		this.exp = bfp.getCopiedExp();
 		this.man = bfp.getCopiedMan();
 	}	
 
-	public BinaryFloatingPoint(Exponent exp, Mantissa man) {		
+	public ZuseBinaryFloatingPoint24Bit(Exponent exp, Mantissa man) {		
 		this.sign = false;
 		this.exp = exp;
 		this.man = man;
 	}
 	
-	public BinaryFloatingPoint(boolean sign, int expBits, int manBits) {
+	public ZuseBinaryFloatingPoint24Bit(boolean sign, int expBits, int manBits) {
 		this.sign = sign;
 		this.exp = new Exponent(expBits);
 		this.man = new Mantissa(manBits);
 	}
 	
-	public BinaryFloatingPoint(boolean sign, Exponent exp, Mantissa man) {		
+	public ZuseBinaryFloatingPoint24Bit(boolean sign, Exponent exp, Mantissa man) {		
 		this.sign = sign;
 		this.exp = exp;
 		this.man = man;
 	}	
 	
-	public BinaryFloatingPoint(int exp, int man, String bin) {
+	public ZuseBinaryFloatingPoint24Bit(int exp, int man, String bin) {
 		this(bin.startsWith("-") ?  true : false, exp,man);
 		this.setNumber(bin);
 	}
 	
-	public BinaryFloatingPoint(int exp, int man, int bin) {
+	public ZuseBinaryFloatingPoint24Bit(int exp, int man, int bin) {
 		this(bin < 0 ? true : false, exp,man);
 		this.setNumber(String.valueOf(bin));
 	}
 
-	public BinaryFloatingPoint(int exp, int man, float num) {
+	public ZuseBinaryFloatingPoint24Bit(int exp, int man, float num) {
 		this(num < 0 ? true : false, exp, man);
 		this.setNumber(String.valueOf(num));
 	}
@@ -112,9 +116,7 @@ public class BinaryFloatingPoint {
 	}
 
 	private void setNumber(String bin) {
-		//if(!BinaryHelper.isBinary(bin)) {
-			bin = BinaryHelper.convDecFloatingPointToBinFloatingPointString(bin, this.exp.getBits());
-//		}
+		bin = BinaryHelper.zuseConvDecFloatingPointToBinFloatingPointString(bin, this.exp.getBits(), this.man.getBits());
 		for(int i = 0; i < bin.length(); i++) {
 			if(i == 0) {
 				if(bin.charAt(i) == '1') {
@@ -130,25 +132,6 @@ public class BinaryFloatingPoint {
 				}
 			}
 		}
-	}
-	
-	public BinaryFloatingPoint add(BinaryFloatingPoint bfp) {
-		return null;
-	}
-	
-	public BinaryFloatingPoint sub(BinaryFloatingPoint b) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public BinaryFloatingPoint mul(BinaryFloatingPoint b) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public BinaryFloatingPoint div(BinaryFloatingPoint b) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 	
 	public String toString() {

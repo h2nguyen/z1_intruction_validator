@@ -6,6 +6,7 @@ package core.helpers;
 import core.logicgates.GateLogic;
 import core.logicgates.GateLogic.MultiGate;
 import core.numbers.BinaryFloatingPoint;
+import core.numbers.ZuseBinaryFloatingPoint24Bit;
 
 /**
  * @author hnguyen
@@ -423,6 +424,57 @@ public class BinaryHelper {
 
 		return sigPart + expPart + manPart;
 	}
+	
+	public static String zuseConvDecFloatingPointToBinFloatingPointString(
+			String decAsString, int expLength, int manLength) {
+
+		if (!decAsString.contains(".")) {
+			decAsString += ".0";
+		}
+		String sigPart = decAsString.contains("-") ? "1" : "0";
+		decAsString = decAsString.replace("-", "");
+
+		String expPart = BinaryHelper.convDecStringToBinString(decAsString.split("[.]")[0]);
+		String manPart = BinaryHelper.convDecFloatBehindThePointToBinString(decAsString.split("[.]")[1]);
+		
+		String realExpPart = "";
+		String realManPart = "";
+		
+		int exp = 0;
+		
+		if(expPart.equalsIgnoreCase("0")) {
+			exp = 0;
+			for (int expCnt = 0; expCnt < manPart.length(); expCnt++) {
+				realManPart = manPart.substring(expCnt+1,manPart.length());
+				if(manPart.charAt(expCnt) == '1' ) {
+					exp = expCnt + 1;
+					break;
+				}
+			}
+			realExpPart = BinaryHelper.binBoolArrayToString(BinaryHelper.twosComplement(BinaryHelper.binStringToBoolArray(BinaryHelper.convDecIntegerToBinString(exp))));
+			
+			while(realExpPart.length() > expLength) {
+				realExpPart = realExpPart.substring(1,realExpPart.length()-1);
+			}
+			
+			realManPart = "0" + realManPart;
+			
+		} else {
+			exp = expPart.length() - 1;
+			realExpPart = BinaryHelper.convDecIntegerToBinString(exp);
+
+			while(realExpPart.length() < expLength)
+				realExpPart = "0" + realExpPart;
+			
+			realManPart = "0" + expPart + manPart;
+
+		}
+		
+		if(realManPart.length() > manLength)
+			realManPart = realManPart.substring(0, manLength - 1);
+
+		return sigPart + realExpPart + realManPart;
+	}
 
 	public static float convBinFloatingPointToDecFloatingPointString(
 			String binAsString, int expLength, boolean asResult) {
@@ -613,6 +665,38 @@ public class BinaryHelper {
 		return inverseOrder(multiBitAdder.eval(inputs));
 	}
 	
+	public static boolean[] normAddBinaryBoolArray(boolean[] bin1, boolean[] bin2, int maxBits) {	
+		if (bin1.length > bin2.length) {
+			boolean[] newBin2 = new boolean[bin1.length];
+
+			for (int i = 0; i < bin2.length; i++) {
+				newBin2[i] = bin2[i];
+			}
+			bin2 = shiftRight(newBin2, bin1.length - bin2.length);
+			
+			
+		} else if (bin2.length > bin1.length) {
+			boolean[] newBin1 = new boolean[bin2.length];
+
+			for (int i = 0; i < bin1.length; i++) {
+				newBin1[i] = bin1[i];
+			}
+			bin1 = shiftRight(newBin1, bin2.length - bin1.length);
+		}
+		
+		
+		MultiGate multiBitAdder = GateLogic.buildAdder(bin1.length);
+	    // Convert input numbers into array of bits
+	    boolean[] inputs = mergeBinaryBoolArray(inverseOrder(bin1),inverseOrder(bin2));
+
+	    boolean[] output = inverseOrder(multiBitAdder.eval(inputs)); 
+	    
+	    while(output.length > maxBits) 
+	    	output = BinaryHelper.removeBitAtPos(output, 0);
+	    
+		return output;
+	}
+	
 	public static boolean[] subBinaryBoolArray(boolean[] bin1, boolean[] bin2) {
 		if (bin1.length > bin2.length) {
 			boolean[] newBin2 = new boolean[bin1.length];
@@ -673,6 +757,13 @@ public class BinaryHelper {
 		return reverse;
 	}
 
+	public static boolean zuseCheckSumSign(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B) {
+		return (A.isSign() && B.isSign()) ? true :
+			(!A.isSign() && !B.isSign()) ? false :
+				(Math.abs(A.floatValue(false)) >= Math.abs(B.floatValue(false)) && !A.isSign()) ||
+				(Math.abs(A.floatValue(false)) <= Math.abs(B.floatValue(false)) && A.isSign()) ? false : true;
+	}
+	
 	public static boolean checkSumSign(BinaryFloatingPoint A, BinaryFloatingPoint B) {
 		return (A.isSign() && B.isSign()) ? true :
 			(!A.isSign() && !B.isSign()) ? false :
@@ -699,9 +790,37 @@ public class BinaryHelper {
 		
 		return false;
 	}
+	
+	public static boolean zuseCheckDifSign(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B) {
+		
+		if(A.isSign() && !B.isSign())
+			return true;
+		if(!A.isSign() && B.isSign()) {
+			return false;
+		}
+		
+		float a = (float) Math.abs(A.floatValue(false));
+		float b = (float) Math.abs(B.floatValue(false)); 
+		
+		if( a > b ) {
+			if(A.isSign() && B.isSign()) return true;
+		} else if( a < b ) {
+			if(!A.isSign() && !B.isSign() ) return true;			
+		}
+		
+		return false;
+	}
 
 	public static boolean checkMulSign(BinaryFloatingPoint a,
 			BinaryFloatingPoint b) {
+		if(a.isSign() && b.isSign() || !a.isSign() && !b.isSign())
+			return false;
+		
+		return true;
+	}
+	
+	public static boolean zuseCheckMulSign(ZuseBinaryFloatingPoint24Bit a,
+			ZuseBinaryFloatingPoint24Bit b) {
 		if(a.isSign() && b.isSign() || !a.isSign() && !b.isSign())
 			return false;
 		

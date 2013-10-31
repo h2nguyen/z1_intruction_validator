@@ -6,8 +6,10 @@ import core.Operation;
 import core.helpers.BinaryHelper;
 import core.logicgates.GateLogic;
 import core.numbers.BinaryFloatingPoint;
+import core.numbers.BinaryFloatingPoint24Bit;
 import core.numbers.BinaryFloatingPoint32Bit;
 import core.numbers.BinaryFloatingPoint64Bit;
+import core.numbers.ZuseBinaryFloatingPoint24Bit;
 
 
 public class BinaryFloatingPointNumberTestCase {
@@ -30,10 +32,12 @@ public class BinaryFloatingPointNumberTestCase {
 //		System.out.println(BinaryHelper.binBoolArrayToString(inputs));
 		
 		
-		BinaryFloatingPoint32Bit bfp32bit1 = new BinaryFloatingPoint32Bit((float)12.0);
-		BinaryFloatingPoint32Bit bfp32bit2 = new BinaryFloatingPoint32Bit((float)112.0);
+//		BinaryFloatingPoint32Bit bfp32bit1 = new BinaryFloatingPoint32Bit((float)18.0);
+//		BinaryFloatingPoint32Bit bfp32bit2 = new BinaryFloatingPoint32Bit((float)3.0);
+		ZuseBinaryFloatingPoint24Bit bfp24bit1 = new ZuseBinaryFloatingPoint24Bit((float)18.0);
+		ZuseBinaryFloatingPoint24Bit bfp24bit2 = new ZuseBinaryFloatingPoint24Bit((float)3.0);
 		
-		float result = (float) new Operation().adder2(bfp32bit1, bfp32bit2).floatValue(true);
+		float result = (float) new Operation().adder2(bfp24bit1, bfp24bit2).floatValue(true);
 //		float result = (float) new Operation().mul(bfp32bit1, bfp32bit2).floatValue(true);
 		System.out.println(result);
 //		System.out.println(BinaryFloatingPoint.DF.format(result).toString().replace(",", "."));
