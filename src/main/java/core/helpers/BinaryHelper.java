@@ -546,6 +546,53 @@ public class BinaryHelper {
 			
 		return result;
 	}
+	
+	public static float zuseConvBinFloatingPointToDecFloatingPointString(
+			String binAsString, int expLength, boolean asResult) {
+		int bitsLength = 1 + expLength;
+		while (binAsString.length() < bitsLength) {
+			binAsString += "0";
+		}
+
+		String signPart = "";
+		String expPart = "";
+		String manPart = "";
+		for (int b = 0; b < binAsString.length(); b++) {
+			if (b == 0)
+				signPart += binAsString.charAt(b);
+			else if (b <= expLength)
+				expPart += binAsString.charAt(b);
+			else
+				manPart += binAsString.charAt(b);
+		}
+		
+		
+		int exp = BinaryHelper.convBinStringToDecInteger(expPart);
+		String binFloatingPoint = BinaryHelper.shiftLeftBinFloatingPointStringAsStringWithoutSignBit(manPart, exp + 1);
+
+
+
+						
+		String[] binFloatingPointParts = binFloatingPoint.split("[.]");
+		
+		if(binFloatingPointParts[0].isEmpty())
+			binFloatingPointParts[0] = "0";
+		if(binFloatingPointParts[1].isEmpty())
+			binFloatingPointParts[1] = "0";
+		
+		float result = 0;
+		if (signPart.charAt(0) == '1') {
+			binFloatingPointParts[0] = binBoolArrayToString(twosComplement(binStringToBoolArray(binFloatingPointParts[0])));
+			result = BinaryHelper.convBinStringToDecInteger(binFloatingPointParts[0]);
+			result += BinaryHelper.convBinBehindPointStringToDecInteger(binFloatingPointParts[1]);
+			result *= -1.0;
+		} else {
+			result = BinaryHelper.convBinStringToDecInteger(binFloatingPointParts[0]);
+			result += BinaryHelper.convBinBehindPointStringToDecInteger(binFloatingPointParts[1]);
+		}
+			
+		return result;
+	}
 
 	public static float convBinIntegerToDecFloat(int binAsInteger) {
 		return convBinStringToDecFloat(String.valueOf(binAsInteger));

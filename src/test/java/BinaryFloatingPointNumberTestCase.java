@@ -34,12 +34,14 @@ public class BinaryFloatingPointNumberTestCase {
 		
 //		BinaryFloatingPoint32Bit bfp32bit1 = new BinaryFloatingPoint32Bit((float)18.0);
 //		BinaryFloatingPoint32Bit bfp32bit2 = new BinaryFloatingPoint32Bit((float)3.0);
-		ZuseBinaryFloatingPoint24Bit bfp24bit1 = new ZuseBinaryFloatingPoint24Bit((float)18.0);
-		ZuseBinaryFloatingPoint24Bit bfp24bit2 = new ZuseBinaryFloatingPoint24Bit((float)3.0);
+		ZuseBinaryFloatingPoint24Bit bfp24bit1 = new ZuseBinaryFloatingPoint24Bit((float)2.0);
+		ZuseBinaryFloatingPoint24Bit bfp24bit2 = new ZuseBinaryFloatingPoint24Bit((float)2.0);
 		
 		float result = (float) new Operation().adder2(bfp24bit1, bfp24bit2).floatValue(true);
+		float result2 = (float) new Operation().mul2(bfp24bit1, bfp24bit2).floatValue(true);
 //		float result = (float) new Operation().mul(bfp32bit1, bfp32bit2).floatValue(true);
-		System.out.println(result);
+		System.out.println("adder:" + result);
+		System.out.println("mul: " + result2);
 //		System.out.println(BinaryFloatingPoint.DF.format(result).toString().replace(",", "."));
 		
 		

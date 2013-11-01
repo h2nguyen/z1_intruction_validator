@@ -10,8 +10,8 @@ import core.helpers.BinaryHelper;
 public class ZuseBinaryFloatingPoint24Bit {
 	public static DecimalFormat DF = new DecimalFormat("############################################.########################################################################################");
 	public static final int EXPONENT = 7;
-	public static final int MANTISSE = 16;
-	public static final int MAXSHIFT = 16;
+	public static final int MANTISSE = 18;
+	public static final int MAXSHIFT = 18;
 	
 	protected boolean sign;
 	protected Exponent exp;
@@ -174,7 +174,7 @@ public class ZuseBinaryFloatingPoint24Bit {
 	}
 	
 	public double floatValue(boolean asResult) {
-		return BinaryHelper.convBinFloatingPointToDecFloatingPointString(this.toString(), this.exp.getBits(),asResult);		
+		return BinaryHelper.zuseConvBinFloatingPointToDecFloatingPointString(this.toString(), this.exp.getBits(),asResult);		
 	}
 	
 	public double doubleValue() {
