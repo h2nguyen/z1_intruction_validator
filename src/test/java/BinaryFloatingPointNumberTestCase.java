@@ -34,15 +34,20 @@ public class BinaryFloatingPointNumberTestCase {
 		
 //		BinaryFloatingPoint32Bit bfp32bit1 = new BinaryFloatingPoint32Bit((float)18.0);
 //		BinaryFloatingPoint32Bit bfp32bit2 = new BinaryFloatingPoint32Bit((float)3.0);
-		ZuseBinaryFloatingPoint24Bit bfp24bit1 = new ZuseBinaryFloatingPoint24Bit((float)2.0);
-		ZuseBinaryFloatingPoint24Bit bfp24bit2 = new ZuseBinaryFloatingPoint24Bit((float)2.0);
+		ZuseBinaryFloatingPoint24Bit bfp24bit1 = new ZuseBinaryFloatingPoint24Bit((float)20);
+		ZuseBinaryFloatingPoint24Bit bfp24bit2 = new ZuseBinaryFloatingPoint24Bit((float)2);
+				
 		
-		float result = (float) new Operation().adder2(bfp24bit1, bfp24bit2).floatValue(true);
-		float result2 = (float) new Operation().mul2(bfp24bit1, bfp24bit2).floatValue(true);
+//		ZuseBinaryFloatingPoint24Bit addres = new Operation().add(bfp24bit1, bfp24bit2);
+//		ZuseBinaryFloatingPoint24Bit subres = new Operation().sub(bfp24bit1, bfp24bit2);
+//		ZuseBinaryFloatingPoint24Bit mulres = new Operation().mul(bfp24bit1, bfp24bit2);
+		ZuseBinaryFloatingPoint24Bit divres = new Operation().div(bfp24bit1, bfp24bit2);
+//		float result2 = (float) new Operation().mul2(bfp24bit1, bfp24bit2).floatValue(true);
 //		float result = (float) new Operation().mul(bfp32bit1, bfp32bit2).floatValue(true);
-		System.out.println("adder:" + result);
-		System.out.println("mul: " + result2);
-//		System.out.println(BinaryFloatingPoint.DF.format(result).toString().replace(",", "."));
+//		System.out.println("adder: " + addres.floatValue(true));
+//		System.out.println("substracter: " + subres.floatValue(true));
+//		System.out.println("multiplier: " + mulres.floatValue(true));
+		System.out.println("divisor: " + divres.floatValue(true));
 		
 		
 	}

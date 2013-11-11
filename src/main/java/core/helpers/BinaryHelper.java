@@ -566,8 +566,15 @@ public class BinaryHelper {
 				manPart += binAsString.charAt(b);
 		}
 		
-		
 		int exp = BinaryHelper.convBinStringToDecInteger(expPart);
+		
+		if(expPart.startsWith("1")) {
+			boolean[] exxx = BinaryHelper.binStringToBoolArray(expPart);
+			exxx = twosComplement(exxx);
+			expPart = BinaryHelper.binBoolArrayToString(exxx);
+			exp = -BinaryHelper.convBinStringToDecInteger(expPart);
+		}
+		
 		String binFloatingPoint = BinaryHelper.shiftLeftBinFloatingPointStringAsStringWithoutSignBit(manPart, exp + 1);
 
 
@@ -582,7 +589,7 @@ public class BinaryHelper {
 		
 		float result = 0;
 		if (signPart.charAt(0) == '1') {
-			binFloatingPointParts[0] = binBoolArrayToString(twosComplement(binStringToBoolArray(binFloatingPointParts[0])));
+			//binFloatingPointParts[0] = binBoolArrayToString(twosComplement(binStringToBoolArray(binFloatingPointParts[0])));
 			result = BinaryHelper.convBinStringToDecInteger(binFloatingPointParts[0]);
 			result += BinaryHelper.convBinBehindPointStringToDecInteger(binFloatingPointParts[1]);
 			result *= -1.0;
