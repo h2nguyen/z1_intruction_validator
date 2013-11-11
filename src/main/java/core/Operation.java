@@ -5,6 +5,194 @@ import core.numbers.ZuseBinaryFloatingPoint24Bit;
 
 public class Operation implements IArithmeticOperations {
 	
+	private ZuseBinaryFloatingPoint24Bit dec2dual(boolean[] Za3, boolean[] Za2, boolean[] Za1, boolean[] Za0, boolean[] u) {
+		
+		boolean[] Aa = new boolean[ZuseBinaryFloatingPoint24Bit.EXPONENT];
+		boolean[] Ab = new boolean[ZuseBinaryFloatingPoint24Bit.EXPONENT];
+		boolean[] Ba = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
+		boolean[] Bb = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
+		
+		
+		boolean[] Ae = null;
+		boolean[] Be = null;
+		
+		
+		boolean lz = false;
+		boolean ph = false;		
+		
+		if(u[8]) {
+			ph = false;
+		} // PH 0
+		
+		while(!ph) {
+			ph = true;
+			u[2] = true;
+			
+			Ba = copy(Za3);
+			Bb = copy(Be);
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 1
+		
+		ph = false;
+		
+		while(!ph) {
+			ph = true;
+			
+			Ba = BinaryHelper.shiftLeft(Be, 1);
+			Bb = BinaryHelper.shiftLeft(Be, 3);
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 2
+		
+		ph = false;
+		
+		while(!ph) {
+			ph = true;
+			u[2] = true;
+			
+			Ba = copy(Za2);
+			Bb = copy(Be);
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 3
+		
+		ph = false;
+		
+		while(!ph) {
+			ph = true;
+			
+			Ba = BinaryHelper.shiftLeft(Be, 1);
+			Bb = BinaryHelper.shiftLeft(Be, 3);
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 4
+		
+		ph = false;
+		
+		while(!ph) {
+			ph = true;
+			u[2] = true;
+			
+			Ba = copy(Za1);
+			Bb = copy(Be);
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 5
+		
+		ph = false;
+		
+		while(!ph) {
+			ph = true;
+			
+			Ba = BinaryHelper.shiftLeft(Be, 1);
+			Bb = BinaryHelper.shiftLeft(Be, 3);
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 6
+		
+		ph = false;
+		
+		while(!ph) {
+			ph = true;
+			u[2] = true;
+			
+			Ab = _LL0L();
+			Ba = copy(Za0);
+			Bb = copy(Be);
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 6
+		
+		ph = false;
+		
+		while(!ph) {
+			
+			if(Be[1] == false) {				
+				Ab = _minus1();
+				Ba = BinaryHelper.shiftLeft(Be, 1);
+			} else {
+				ph = true;
+				Aa = copy(Ae);
+				Bb = copy(Be);
+			}
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 8
+		
+		ph = false;
+		
+		while(!ph) {
+			Ba = copy(Be);
+			
+			if(u[6] == false) {
+				Aa = copy(Ae);				
+				ph = true;
+			} else {
+				Ab = _LL();
+				Bb = BinaryHelper.shiftRight(Be, 2);
+				u[6] = true;
+				u[4] = true;
+			}
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 9
+		
+		ph = false;
+		
+		while(!ph) {
+			if(Be[0] == false) {
+				Ba = copy(Be);
+				ph = true;
+			} else {
+				Ab = _plus1();
+				Bb = BinaryHelper.shiftRight(Be, 1);
+			}
+			
+			if(u[7] == false) {
+				lz = true;
+				u[1] = true;
+				break;
+			} else {
+				
+			}
+			
+			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 10
+		
+		ph = false;
+		
+		if(lz) {
+			return new ZuseBinaryFloatingPoint24Bit(new Exponent(Ae), new Mantissa(Be));
+		}
+		
+		return new ZuseBinaryFloatingPoint24Bit(new Exponent(Ae), new Mantissa(Be));
+	}
+	
+	private boolean[] dual2dec(boolean[] Za3, boolean[] Za2, boolean[] Za1, boolean[] Za0, boolean[] u) {
+		return null;
+	}
+
 	public ZuseBinaryFloatingPoint24Bit adder(ZuseBinaryFloatingPoint24Bit A, ZuseBinaryFloatingPoint24Bit B, boolean[] s) {
 		
 		boolean[] Af = A.getExp().getCopiedBoolArr();
@@ -296,7 +484,7 @@ public class Operation implements IArithmeticOperations {
 		
 		return new ZuseBinaryFloatingPoint24Bit(new Exponent(Ae), new Mantissa(Be));
 	}
-	
+
 	private ZuseBinaryFloatingPoint24Bit divisor(ZuseBinaryFloatingPoint24Bit A,	ZuseBinaryFloatingPoint24Bit B, boolean[] s) {
 		boolean[] Af = A.getExp().getCopiedBoolArr();
 		boolean[] Ag = B.getExp().getCopiedBoolArr();
@@ -330,6 +518,8 @@ public class Operation implements IArithmeticOperations {
 		
 		ph = false;
 		
+		boolean uPlus2 = true;
+		
 		while (!ph) {
 			Aa = copy(Ae);
 			Ba = copy(Be);			
@@ -337,20 +527,27 @@ public class Operation implements IArithmeticOperations {
 			
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
-			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE + 1);
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 1
 		
 		ph = false;
 		
 		for (int phase = 2; phase <= 17; phase++) {
-			
+
 			while (!ph) {
-				
 				Aa = copy(Ae);
-								
-				boolean uPlus2 = false;
-				if(uPlus2  == false)
+				//TODO: here is the bug!!!
+				if(Be[0])
+					uPlus2 = true;
+				else 
+					uPlus2 = false;
+				if(Be.length > ZuseBinaryFloatingPoint24Bit.MANTISSE) {
+					Be = BinaryHelper.removeBitAtPos(Be, Be.length-1);
+				}
+				//BUG ends.
+				
+				if(uPlus2 == false)
 					Bb = copy(Bg);
 				else
 					Bb = neg(Bg);
@@ -384,11 +581,12 @@ public class Operation implements IArithmeticOperations {
 			if(Be[1] == false) {
 				Aa = copy(Ae);
 				Ab = _minus1();
-				
 				Ba = BinaryHelper.shiftLeft(Be, 1);
 			} else {
 				Aa = copy(Ae);
 				Bb = copy(Be);
+				lz = true;
+				break;
 			}
 
 			ph = true;
@@ -501,6 +699,14 @@ public class Operation implements IArithmeticOperations {
 		return BinaryHelper.twosComplement(_plus1());
 	}
 
+	private boolean[] _LL0L() {
+		return new boolean[]{false, false, false, true, true, false, true};
+	}
+	
+	private boolean[] _LL() {
+		return new boolean[]{false, false, false, false, false, true, true};
+	}
+	
 	private boolean[] neg(boolean[] ar) {
 		return BinaryHelper.twosComplement(ar);
 	}
