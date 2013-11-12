@@ -798,7 +798,12 @@ public class BinaryHelper {
 		for (int i = 0; i < bin.length; i++) {
 			complement[i] = !bin[i];
 		}
-		return addBinaryBoolArray(complement,new boolean[]{true});
+		complement = addBinaryBoolArray(complement,new boolean[]{true}); 
+		
+		if(complement.length > bin.length)
+			complement = BinaryHelper.removeBitAtPos(complement, 0);
+		
+		return complement;
 	}
 
 	private static boolean[] inverseOrder(boolean[] bin) {

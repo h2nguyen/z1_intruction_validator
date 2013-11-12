@@ -198,17 +198,17 @@ public class Operation implements IArithmeticOperations {
 		boolean[] Af = A.getExp().getCopiedBoolArr();
 		boolean[] Ag = B.getExp().getCopiedBoolArr();
 		boolean[] Bf = A.getMan().getCopiedBoolArr();
-		boolean[] Bg = B.getMan().getCopiedBoolArr();
-		
+		boolean[] Bg = B.getMan().getCopiedBoolArr();		
 		
 		boolean[] Aa = new boolean[ZuseBinaryFloatingPoint24Bit.EXPONENT];
 		boolean[] Ab = new boolean[ZuseBinaryFloatingPoint24Bit.EXPONENT];
 		boolean[] Ba = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
 		boolean[] Bb = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
 		
+		boolean[] Ae = new boolean[ZuseBinaryFloatingPoint24Bit.EXPONENT];
+		boolean[] Be = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
 		
-		boolean[] Ae = null;
-		boolean[] Be = null;
+		printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Start");	
 		
 		
 		boolean lz = false;
@@ -222,24 +222,30 @@ public class Operation implements IArithmeticOperations {
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
-			reset(Aa,Ab,Ba,Bb);
-		} // PH 0
-		
-		ph = false;
-		// select largest exponent
-		while (!ph) {
+			
 			if(Ae[0])
 				s[1] = true;
 			else 
 				s[1] = false;
 			if(Ae.length > Aa.length)
 				Ae = BinaryHelper.removeBitAtPos(Ae, 0);
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 0");
+			reset(Aa,Ab,Ba,Bb);
+		} // PH 0
+		
+		ph = false;
+		// select largest exponent
+		while (!ph) {
+			
 				
 			Aa = copy(Ae);
 
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);		
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 1");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 1
 		
@@ -261,6 +267,8 @@ public class Operation implements IArithmeticOperations {
 			else 
 				Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 2");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 2
 
@@ -284,7 +292,13 @@ public class Operation implements IArithmeticOperations {
 			else {
 				Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);
 			}
+			
+			if(Ae.length > ZuseBinaryFloatingPoint24Bit.EXPONENT) {
+				Ae = BinaryHelper.removeBitAtPos(Ae, 0);
+			}
+			
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 3");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 3
 		
@@ -309,6 +323,7 @@ public class Operation implements IArithmeticOperations {
 			
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);			
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 4");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 4
 		
@@ -343,6 +358,7 @@ public class Operation implements IArithmeticOperations {
 			
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);		
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 5");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 5
 		
@@ -367,12 +383,14 @@ public class Operation implements IArithmeticOperations {
 			
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);			
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			
+			if(Ae.length > ZuseBinaryFloatingPoint24Bit.EXPONENT) {
+				Ae = BinaryHelper.removeBitAtPos(Ae, 0);
+			}
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 6");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 6
-		
-		if(Ae.length > ZuseBinaryFloatingPoint24Bit.EXPONENT) {
-			Ae = BinaryHelper.removeBitAtPos(Ae, 0);
-		}
 		
 		if(lz) {
 			return new ZuseBinaryFloatingPoint24Bit(new Exponent(Ae), new Mantissa(Be));
@@ -395,8 +413,10 @@ public class Operation implements IArithmeticOperations {
 		boolean[] Bb = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
 		
 		
-		boolean[] Ae = null;
-		boolean[] Be = null;
+		boolean[] Ae = new boolean[ZuseBinaryFloatingPoint24Bit.EXPONENT];
+		boolean[] Be = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
+		
+		printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Start");
 		
 		
 		boolean lz = false;
@@ -410,6 +430,8 @@ public class Operation implements IArithmeticOperations {
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 0");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 0
 		
@@ -420,11 +442,10 @@ public class Operation implements IArithmeticOperations {
 			while (!ph) {
 				
 				Aa = copy(Ae);
-				int pos = Bf.length - phase;
-				boolean mm = Bf[pos]; 
+				int pos = Bf.length - 1;
+				boolean mm = Bf[pos];
+				Bf = BinaryHelper.shiftRight(Bf,1);
 				Ba = BinaryHelper.shiftRight(Be,1);
-				
-				
 				
 				if(mm)
 					Bb = copy(Bg);
@@ -432,6 +453,9 @@ public class Operation implements IArithmeticOperations {
 				ph = true;
 				Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);		
 				Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+				
+				printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase "+phase);
+				
 				reset(Aa,Ab,Ba,Bb);
 			} // PH 1...17
 			
@@ -454,6 +478,8 @@ public class Operation implements IArithmeticOperations {
 
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 18");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 18
 		
@@ -472,6 +498,8 @@ public class Operation implements IArithmeticOperations {
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 19");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 19
 		
@@ -498,9 +526,10 @@ public class Operation implements IArithmeticOperations {
 		boolean[] Bb = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
 		
 		
-		boolean[] Ae = null;
-		boolean[] Be = null;
+		boolean[] Ae = new boolean[ZuseBinaryFloatingPoint24Bit.EXPONENT];
+		boolean[] Be = new boolean[ZuseBinaryFloatingPoint24Bit.MANTISSE];
 		
+		printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Start");
 		
 		boolean lz = false;
 		boolean ph = false;
@@ -513,6 +542,8 @@ public class Operation implements IArithmeticOperations {
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 0");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 0
 		
@@ -528,6 +559,8 @@ public class Operation implements IArithmeticOperations {
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE + 1);
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 1");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 1
 		
@@ -556,6 +589,9 @@ public class Operation implements IArithmeticOperations {
 				ph = true;
 				Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);		
 				Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+				
+				printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase "+phase);
+				
 				reset(Aa,Ab,Ba,Bb);
 			} // PH 2...17
 			
@@ -571,6 +607,8 @@ public class Operation implements IArithmeticOperations {
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 19");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 19
 		
@@ -592,6 +630,8 @@ public class Operation implements IArithmeticOperations {
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
+			
+			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 20");
 			reset(Aa,Ab,Ba,Bb);
 		} // PH 20
 		
@@ -765,5 +805,28 @@ public class Operation implements IArithmeticOperations {
 			array[a] = false;
 		}
 	}
+	
+	private void printArray(boolean arr[], String text) {
+		
+		String s = "";
+		for (int i = 0; i < arr.length; i++) {
+			if(arr[i]) {
+				s += "1";
+			} else {
+				s += "0";
+			}
+		}
+		
+		System.out.print(text + ": " + s);
+	}
 
+	private void printRegisters(boolean[] Af, boolean[] Ag, boolean[] Bf, boolean[] Bg, boolean[] Aa, boolean[] Ab, boolean[] Ba, boolean[] Bb, boolean[] Ae, boolean[] Be, String text) {
+		System.out.println(text);
+		printArray(Af,"Af"); System.out.print(" ~ "); printArray(Ag,"Ag"); System.out.print(" ~ "); printArray(Bf,"Bf"); System.out.print(" ~ "); printArray(Bg,"Bg");
+		System.out.println();
+		printArray(Aa,"Aa"); System.out.print(" ~ "); printArray(Ab,"Ab"); System.out.print(" ~ "); printArray(Ba,"Ba"); System.out.print(" ~ "); printArray(Bb,"Bb");
+		System.out.println();
+		printArray(Ae,"Ae"); System.out.print(" ~ "); printArray(Be,"Be");
+		System.out.println();
+	}
 }
