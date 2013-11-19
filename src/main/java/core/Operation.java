@@ -223,10 +223,6 @@ public class Operation implements IArithmeticOperations {
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
 			
-			if(Ae[0])
-				s[1] = true;
-			else 
-				s[1] = false;
 			if(Ae.length > Aa.length)
 				Ae = BinaryHelper.removeBitAtPos(Ae, 0);
 			
@@ -237,7 +233,12 @@ public class Operation implements IArithmeticOperations {
 		ph = false;
 		// select largest exponent
 		while (!ph) {
+			int ae = bin2dec2sComplement(Ae);
 			
+			if(ae >= 0)
+				s[1] = true;
+			else 
+				s[1] = false;
 				
 			Aa = copy(Ae);
 
@@ -262,10 +263,15 @@ public class Operation implements IArithmeticOperations {
 				ph = true;
 			}
 			
-			if(s[1])
+			if(s[1]) {
 				Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);
-			else 
+			} else { 
 				Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT + 1);
+			}
+			
+			if(Ae.length > ZuseBinaryFloatingPoint24Bit.EXPONENT)
+				Ae = BinaryHelper.removeBitAtPos(Ae, 0);
+			
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
 			
 			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 2");
@@ -275,7 +281,8 @@ public class Operation implements IArithmeticOperations {
 		ph = false;
 		
 		while (!ph) {
-			int ae = bin2dec(Ae);
+
+			int ae = bin2dec2sComplement(Ae);			
 			
 			Aa = copy(Ae);
 			
@@ -349,7 +356,7 @@ public class Operation implements IArithmeticOperations {
 					Ba = neg(Be);
 					s[3] = true;
 					ph = true;
-				} else {
+				} else {					
 					Aa = copy(Ae);
 					Bb = copy(Be);
 					ph = true;
@@ -369,12 +376,14 @@ public class Operation implements IArithmeticOperations {
 		ph = false;
 
 		while (!ph) {
-			if(s[0] == false) {
+			if(s[0] == false) {				
 				if(Be[1] == false) {
+					s[3] = true;
 					Aa = copy(Ae);
 					Ab = _minus1();
 					Ba = BinaryHelper.shiftLeft(Be, 1);
 				} else {
+					
 					lz = true;
 					Bb = copy(Be);
 					break;
@@ -677,12 +686,14 @@ public class Operation implements IArithmeticOperations {
 		if(B.isSign())
 			BTmp = _2sComplement(BTmp);
 		
-		// check the sign
-		boolean sign = BinaryHelper.zuseCheckDifSign(A, B);
+
 		
-		boolean[] s = new boolean[]{false, true, false, false, false, false, true, false};
+		boolean[] s = new boolean[]{false, true, false, false, false, false, true, false};		
 		
 		ZuseBinaryFloatingPoint24Bit bfp = adder(ATmp,BTmp,s);
+		// check the sign
+		boolean sign = BinaryHelper.zuseCheckDifSign(A, B);
+//		boolean sign = s[3];
 		
 		if(bfp.isSign()) {
 			bfp = _2sComplement(bfp);
@@ -787,10 +798,21 @@ public class Operation implements IArithmeticOperations {
 		
 		int dec = BinaryHelper.convBinStringToDecInteger(BinaryHelper.binBoolArrayToString(newBin));
 		
-		if(!sign)
-			dec *= -1.0;
+//		if(sign)
+//			dec *= -1.0;
 			
 		return dec;
+	}
+	
+	private int bin2dec2sComplement(boolean[] bin) {
+		boolean sign = bin[0];
+		
+		boolean[] newBin = copy(bin);
+		
+		if(sign)
+			newBin = BinaryHelper.twosComplement(bin);
+		
+		return sign ? -1*bin2dec(newBin) : bin2dec(newBin);
 	}
 
 	private void reset(boolean[] aa, boolean[] ab, boolean[] ba, boolean[] bb) {
