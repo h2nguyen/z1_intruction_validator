@@ -28,8 +28,8 @@ public class Operation implements IArithmeticOperations {
 			ph = true;
 			u[2] = true;
 			
-			Ba = copy(Za3);
-			Bb = copy(Be);
+			Ba = BinaryHelper.copy(Za3);
+			Bb = BinaryHelper.copy(Be);
 			
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
@@ -55,8 +55,8 @@ public class Operation implements IArithmeticOperations {
 			ph = true;
 			u[2] = true;
 			
-			Ba = copy(Za2);
-			Bb = copy(Be);
+			Ba = BinaryHelper.copy(Za2);
+			Bb = BinaryHelper.copy(Be);
 			
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
@@ -82,8 +82,8 @@ public class Operation implements IArithmeticOperations {
 			ph = true;
 			u[2] = true;
 			
-			Ba = copy(Za1);
-			Bb = copy(Be);
+			Ba = BinaryHelper.copy(Za1);
+			Bb = BinaryHelper.copy(Be);
 			
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
@@ -110,8 +110,8 @@ public class Operation implements IArithmeticOperations {
 			u[2] = true;
 			
 			Ab = _LL0L();
-			Ba = copy(Za0);
-			Bb = copy(Be);
+			Ba = BinaryHelper.copy(Za0);
+			Bb = BinaryHelper.copy(Be);
 			
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
@@ -127,8 +127,8 @@ public class Operation implements IArithmeticOperations {
 				Ba = BinaryHelper.shiftLeft(Be, 1);
 			} else {
 				ph = true;
-				Aa = copy(Ae);
-				Bb = copy(Be);
+				Aa = BinaryHelper.copy(Ae);
+				Bb = BinaryHelper.copy(Be);
 			}
 			
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
@@ -139,10 +139,10 @@ public class Operation implements IArithmeticOperations {
 		ph = false;
 		
 		while(!ph) {
-			Ba = copy(Be);
+			Ba = BinaryHelper.copy(Be);
 			
 			if(u[6] == false) {
-				Aa = copy(Ae);				
+				Aa = BinaryHelper.copy(Ae);				
 				ph = true;
 			} else {
 				Ab = _LL();
@@ -160,7 +160,7 @@ public class Operation implements IArithmeticOperations {
 		
 		while(!ph) {
 			if(Be[0] == false) {
-				Ba = copy(Be);
+				Ba = BinaryHelper.copy(Be);
 				ph = true;
 			} else {
 				Ab = _plus1();
@@ -216,7 +216,7 @@ public class Operation implements IArithmeticOperations {
 		
 		// determine the difference d of the exponents
 		while (!ph) {
-			Aa = copy(Af);			
+			Aa = BinaryHelper.copy(Af);			
 			Ab = neg(Ag);
 			
 			ph = true;
@@ -240,7 +240,7 @@ public class Operation implements IArithmeticOperations {
 			else 
 				s[1] = false;
 				
-			Aa = copy(Ae);
+			Aa = BinaryHelper.copy(Ae);
 
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);		
@@ -254,12 +254,12 @@ public class Operation implements IArithmeticOperations {
 		// check if exponent is greater equal zero
 		while (!ph) {
 			if(s[1]) {
-				Aa = copy(Ae);
-				Bb = copy(Bg);
+				Aa = BinaryHelper.copy(Ae);
+				Bb = BinaryHelper.copy(Bg);
 				ph = true;
 			} else {
 				Aa = neg(Ae);
-				Bb = copy(Bf);
+				Bb = BinaryHelper.copy(Bf);
 				ph = true;
 			}
 			
@@ -284,10 +284,10 @@ public class Operation implements IArithmeticOperations {
 
 			int ae = bin2dec2sComplement(Ae);			
 			
-			Aa = copy(Ae);
+			Aa = BinaryHelper.copy(Ae);
 			
 			if(ae == 0) {
-				Ba = copy(Be);
+				Ba = BinaryHelper.copy(Be);
 				ph = true;
 			} else {
 				Ab = _minus1();
@@ -313,18 +313,18 @@ public class Operation implements IArithmeticOperations {
 		
 		while (!ph) {
 			if(s[0]) {
-				Ba = copy(Be);
+				Ba = BinaryHelper.copy(Be);
 			} else {
 				Ba = neg(Be);
 			}
 			
 			if(s[1]) {
-				Aa = copy(Af);
-				Bb = copy(Bf);
+				Aa = BinaryHelper.copy(Af);
+				Bb = BinaryHelper.copy(Bf);
 				ph = true;
 			} else {
-				Ab = copy(Ag);
-				Bb = copy(Bg);
+				Ab = BinaryHelper.copy(Ag);
+				Bb = BinaryHelper.copy(Bg);
 				ph = true;
 			}
 			
@@ -340,25 +340,25 @@ public class Operation implements IArithmeticOperations {
 			// Be[0] ^= Be_1; Be[1] ^= Be_0; Be[2] ^= Be_-1 ...
 			if(s[0] == true) {
 				if(Be[0] == false) {
-					Aa = copy(Ae);
-					Ba = copy(Be);
+					Aa = BinaryHelper.copy(Ae);
+					Ba = BinaryHelper.copy(Be);
 					lz = true;
 					break;
 				} else {
-					Aa = copy(Ae);
+					Aa = BinaryHelper.copy(Ae);
 					Ab = _plus1();
 					Bb = BinaryHelper.shiftRight(Be, 1);
 				}
 			} else {
 				
 				if(Be[0]) {
-					Aa = copy(Ae);
+					Aa = BinaryHelper.copy(Ae);
 					Ba = neg(Be);
 					s[3] = true;
 					ph = true;
 				} else {					
-					Aa = copy(Ae);
-					Bb = copy(Be);
+					Aa = BinaryHelper.copy(Ae);
+					Bb = BinaryHelper.copy(Be);
 					ph = true;
 				}
 			}
@@ -379,13 +379,13 @@ public class Operation implements IArithmeticOperations {
 			if(s[0] == false) {				
 				if(Be[1] == false) {
 					s[3] = true;
-					Aa = copy(Ae);
+					Aa = BinaryHelper.copy(Ae);
 					Ab = _minus1();
 					Ba = BinaryHelper.shiftLeft(Be, 1);
 				} else {
 					
 					lz = true;
-					Bb = copy(Be);
+					Bb = BinaryHelper.copy(Be);
 					break;
 				}
 			}
@@ -433,8 +433,8 @@ public class Operation implements IArithmeticOperations {
 		
 		// determine the difference d of the exponents
 		while (!ph) {
-			Aa = copy(Af);			
-			Ab = copy(Ag);
+			Aa = BinaryHelper.copy(Af);			
+			Ab = BinaryHelper.copy(Ag);
 			
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
@@ -450,14 +450,14 @@ public class Operation implements IArithmeticOperations {
 			
 			while (!ph) {
 				
-				Aa = copy(Ae);
+				Aa = BinaryHelper.copy(Ae);
 				int pos = Bf.length - 1;
 				boolean mm = Bf[pos];
 				Bf = BinaryHelper.shiftRight(Bf,1);
 				Ba = BinaryHelper.shiftRight(Be,1);
 				
 				if(mm)
-					Bb = copy(Bg);
+					Bb = BinaryHelper.copy(Bg);
 
 				ph = true;
 				Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);		
@@ -474,9 +474,9 @@ public class Operation implements IArithmeticOperations {
 		ph = false;
 		
 		while (!ph) {
-			Aa = copy(Ae);
+			Aa = BinaryHelper.copy(Ae);
 			if(Be[0] == false) {
-				Ba = copy(Be);
+				Ba = BinaryHelper.copy(Be);
 				ph = true;
 				
 			} else {
@@ -495,12 +495,12 @@ public class Operation implements IArithmeticOperations {
 		ph = false;
 		
 		while (!ph) {
-			Aa = copy(Ae);
+			Aa = BinaryHelper.copy(Ae);
 			if(Be[0] == true) {
 				Ab = _plus1();
 				Bb = BinaryHelper.shiftRight(Be,1);
 			} else {
-				Ba = copy(Be);
+				Ba = BinaryHelper.copy(Be);
 			}
 			
 			
@@ -545,9 +545,9 @@ public class Operation implements IArithmeticOperations {
 		
 		// determine the difference d of the exponents
 		while (!ph) {
-			Aa = copy(Af);			
+			Aa = BinaryHelper.copy(Af);			
 			Ab = neg(Ag);
-			Bb = copy(Bf);
+			Bb = BinaryHelper.copy(Bf);
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
 			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
@@ -561,13 +561,13 @@ public class Operation implements IArithmeticOperations {
 		boolean uPlus2 = true;
 		
 		while (!ph) {
-			Aa = copy(Ae);
-			Ba = copy(Be);			
+			Aa = BinaryHelper.copy(Ae);
+			Ba = BinaryHelper.copy(Be);			
 			Bb = neg(Bg);
 			
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
-			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE + 1);
+			Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
 			
 			printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase 1");
 			reset(Aa,Ab,Ba,Bb);
@@ -575,28 +575,30 @@ public class Operation implements IArithmeticOperations {
 		
 		ph = false;
 		
-		for (int phase = 2; phase <= 17; phase++) {
+		for (int phase = 1; phase <= 17; phase++) {
 
 			while (!ph) {
-				Aa = copy(Ae);
-				//TODO: here is the bug!!!
-				if(Be[0])
+				Aa = BinaryHelper.copy(Ae);
+				if(Be[0]) {
 					uPlus2 = true;
-				else 
+				} else { 
 					uPlus2 = false;
-				if(Be.length > ZuseBinaryFloatingPoint24Bit.MANTISSE) {
-					Be = BinaryHelper.removeBitAtPos(Be, Be.length-1);
 				}
-				//BUG ends.
 				
-				if(uPlus2 == false)
-					Bb = copy(Bg);
-				else
+				
+				if(uPlus2 == true) {
+					Bb = BinaryHelper.copy(Bg);
+					Bf = BinaryHelper.shiftLeft(Bf, 1, false);
+				} else {
 					Bb = neg(Bg);
+					Bf = BinaryHelper.shiftLeft(Bf, 1, true);
+				}
+					
 				Ba = BinaryHelper.shiftLeft(Be, 1);
-
+				
+				
 				ph = true;
-				Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);		
+				Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);
 				Be = BinaryHelper.normAddBinaryBoolArray(Ba, Bb, ZuseBinaryFloatingPoint24Bit.MANTISSE);
 				
 				printRegisters(Af, Ag, Bf, Bg, Aa, Ab, Ba, Bb, Ae, Be, "Phase "+phase);
@@ -610,8 +612,8 @@ public class Operation implements IArithmeticOperations {
 		ph = false;
 		
 		while (!ph) {
-			Aa = copy(Ae);
-			Bb = copy(Bf);
+			Aa = BinaryHelper.copy(Ae);
+			Bb = BinaryHelper.copy(Bf);
 			
 			ph = true;
 			Ae = BinaryHelper.normAddBinaryBoolArray(Aa, Ab, ZuseBinaryFloatingPoint24Bit.EXPONENT);	
@@ -626,12 +628,12 @@ public class Operation implements IArithmeticOperations {
 		while (!ph) {
 			
 			if(Be[1] == false) {
-				Aa = copy(Ae);
+				Aa = BinaryHelper.copy(Ae);
 				Ab = _minus1();
 				Ba = BinaryHelper.shiftLeft(Be, 1);
 			} else {
-				Aa = copy(Ae);
-				Bb = copy(Be);
+				Aa = BinaryHelper.copy(Ae);
+				Bb = BinaryHelper.copy(Be);
 				lz = true;
 				break;
 			}
@@ -782,15 +784,6 @@ public class Operation implements IArithmeticOperations {
 		return new ZuseBinaryFloatingPoint24Bit(sign, new Exponent(exp), new Mantissa(man));
 	}
 
-	private boolean[] copy(boolean[] arr) {
-		boolean[] copied = new boolean[arr.length];
-		
-		for (int i = 0; i < copied.length; i++) {
-			copied[i] = arr[i];
-		}
-		return copied;
-	}
-
 	private int bin2dec(boolean[] bin) {
 		boolean sign = bin[0];
 		
@@ -807,7 +800,7 @@ public class Operation implements IArithmeticOperations {
 	private int bin2dec2sComplement(boolean[] bin) {
 		boolean sign = bin[0];
 		
-		boolean[] newBin = copy(bin);
+		boolean[] newBin = BinaryHelper.copy(bin);
 		
 		if(sign)
 			newBin = BinaryHelper.twosComplement(bin);

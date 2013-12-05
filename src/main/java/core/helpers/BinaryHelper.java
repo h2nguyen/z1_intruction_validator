@@ -663,6 +663,12 @@ public class BinaryHelper {
 		return arrS;
 	}
 	
+	public static boolean[] shiftRight(boolean[] arr, int d, boolean added) {
+		boolean[] newArr = BinaryHelper.copy(shiftRight(arr, d));
+		newArr[0] = added;
+		return newArr;
+	}
+	
 	public static boolean[] shiftRightFillOne(boolean[] arr, int d) {
 		boolean[] arrS = shiftRight(arr,d);
 		arrS[0] = true;
@@ -677,6 +683,12 @@ public class BinaryHelper {
 		}
 
 		return arrS;
+	}
+	
+	public static boolean[] shiftLeft(boolean[] arr, int d, boolean added) {
+		boolean[] newArr = BinaryHelper.copy(shiftLeft(arr, d));
+		newArr[newArr.length-1] = added;
+		return newArr;
 	}
 
 	public static boolean[] mergeBinaryBoolArray(boolean[] bin1, boolean[] bin2) {
@@ -884,6 +896,15 @@ public class BinaryHelper {
 			return false;
 		
 		return true;
+	}
+	
+	public static boolean[] copy(boolean[] arr) {
+		boolean[] copied = new boolean[arr.length];
+		
+		for (int i = 0; i < copied.length; i++) {
+			copied[i] = arr[i];
+		}
+		return copied;
 	}
 
 }
